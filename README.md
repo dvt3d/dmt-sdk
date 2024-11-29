@@ -1,4 +1,4 @@
 
-# lib-cli
+# dm-sdk
 
-一个使用gulp结合esbuild构建框架包的脚手架
+A 3D geographic framework built on maplibre-gl-js and three.js.

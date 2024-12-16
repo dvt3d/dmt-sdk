@@ -6,7 +6,7 @@ const Empty_GeoJSON = {
 }
 
 class GeoJsonParser {
-  static parseOverlayToGeoJson(overlays, type) {
+  static parseOverlaysToGeoJson(overlays, type) {
     if (!overlays || !overlays.length) {
       return Empty_GeoJSON
     }

@@ -1,0 +1,1 @@
+class Point3D {}

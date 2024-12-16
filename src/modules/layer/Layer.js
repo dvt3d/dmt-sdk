@@ -1,4 +1,5 @@
 import { Event } from '../event'
+import LayerType from './LayerType'
 
 class Layer extends Event {
   constructor(id) {
@@ -59,6 +60,25 @@ class Layer extends Event {
       result.push(this._cache[key])
     }
     return result
+  }
+
+  /**
+   * Registers Type
+   * @param type
+   */
+  static registerType(type) {
+    if (type) {
+      LayerType[type.toLocaleUpperCase()] = type.toLocaleLowerCase()
+    }
+  }
+
+  /**
+   * Returns type
+   * @param type
+   * @returns {*|undefined}
+   */
+  static getType(type) {
+    return LayerType[type.toLocaleUpperCase()] || undefined
   }
 }
 

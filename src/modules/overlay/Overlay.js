@@ -26,11 +26,27 @@ class Overlay extends Event {
     return this._bid
   }
 
-  _onAdd(Layer) {}
+  /**
+   *
+   * @param layer
+   * @private
+   */
+  _onAdd(layer) {}
 
+  /**
+   *
+   * @private
+   */
   _onRemove() {}
 
-  setStyle() {}
+  /**
+   *
+   * @param style
+   * @returns {Overlay}
+   */
+  setStyle(style) {
+    return this
+  }
 }
 
 export default Overlay

@@ -2,6 +2,8 @@ import THREEScene from '../scene/THREEScene'
 import { MapLib, THREE } from '../../name-space'
 import { MapScene } from '@dvgis/maplibre-three-plugin'
 import { SceneMode } from '../constant'
+import { BaseLayerType } from '../base-layer'
+import { LayerType } from '../layer'
 
 const DEF_STYLE = {
   version: 8,
@@ -72,12 +74,12 @@ class Viewer {
     return this._map
   }
 
-  get scene() {
-    return this._scene
+  get sceneMode() {
+    return this._sceneMode
   }
 
-  get only3d() {
-    return this._only3d
+  get scene() {
+    return this._scene
   }
 
   get ready() {
@@ -92,8 +94,13 @@ class Viewer {
     return this._clock
   }
 
-  get defaultSceneLayer() {
-    return 'map_scene_layer'
+  /**
+   *
+   * @param terrain
+   * @returns {Viewer}
+   */
+  setTerrain(terrain) {
+    return this
   }
 
   /**
@@ -102,20 +109,24 @@ class Viewer {
    * @returns
    */
   addBaseLayer(baseLayer) {
-    if (baseLayer) {
-      if (this._baseLayerCache[baseLayer.id]) {
-        throw 'the base layer already exists'
-      }
-      let hasSelected = false
-      for (let key in this._baseLayerCache) {
-        let item = this._baseLayerCache[key]
-        hasSelected = hasSelected || item.selected
-      }
-      baseLayer.fire('add', this)
-      this._baseLayerCache[baseLayer.id] = baseLayer
-      if (!hasSelected) {
-        baseLayer.selected = true
-      }
+    if (!baseLayer) {
+      return this
+    }
+    if (this._sceneMode !== SceneMode.MAP_SCENE) {
+      throw 'this scene mode not support the function'
+    }
+    if (this._baseLayerCache[baseLayer.id]) {
+      throw 'the base layer already exists'
+    }
+    baseLayer.fire('add', this)
+    this._baseLayerCache[baseLayer.id] = baseLayer
+    //If no base layer is selected in the viewer, the first one will be selected by default.
+    let hasSelected = false
+    for (let key in this._baseLayerCache) {
+      hasSelected = hasSelected || this._baseLayerCache[key].selected
+    }
+    if (!hasSelected) {
+      baseLayer.selected = true
     }
     return this
   }
@@ -126,6 +137,17 @@ class Viewer {
    * @returns
    */
   removeBaseLayer(baseLayer) {
+    if (!baseLayer) {
+      return this
+    }
+    if (this._sceneMode !== SceneMode.MAP_SCENE) {
+      throw 'this scene mode not support the function'
+    }
+    if (!this._baseLayerCache[baseLayer.id]) {
+      throw 'the baseLayer not exits'
+    }
+    baseLayer.fire('remove')
+    delete this._baseLayerCache[baseLayer.id]
     return this
   }
 
@@ -135,6 +157,10 @@ class Viewer {
    * @returns
    */
   changeBaseLayer(index) {
+    if (this._sceneMode !== SceneMode.MAP_SCENE) {
+      throw 'this scene mode not support the function'
+    }
+
     let currentId = undefined
     let nextId = undefined
     Object.keys(this._baseLayerCache).forEach((layerId, keyIndex) => {
@@ -151,24 +177,30 @@ class Viewer {
     if (currentId === nextId) {
       return this
     }
+
+    this._baseLayerCache[currentId].selected = false
+    //change vec to raster , needs readd the 2d layers
     if (
-      this._baseLayerCache[currentId].provider.type === 'Style' &&
-      this._baseLayerCache[nextId].provider.type !== 'Style'
+      this._baseLayerCache[currentId].provider.type === BaseLayerType.STYLE &&
+      this._baseLayerCache[nextId].provider.type !== BaseLayerType.STYLE
     ) {
       const reloadLayers = () => {
-        this._map.off('style.load', reloadLayers.bind(this))
-        let layers = this.getLayers()
+        let layers = this.getLayers().filter(
+          (layer) => LayerType.VECTOR === layer.type
+        )
         for (let i = 0; i < layers.length; i++) {
           let layer = layers[i]
           delete this._layerCache[layer.id]
           this.addLayer(layer)
         }
+        this._baseLayerCache[nextId].selected = true
       }
-      this._map.on('style.load', reloadLayers.bind(this))
+      this._map.once('style.load', reloadLayers.bind(this))
       this._map.setStyle(DEF_STYLE, { diff: false }) //remove all layer
+    } else {
+      this._baseLayerCache[nextId].selected = true
     }
-    this._baseLayerCache[currentId].selected = false
-    this._baseLayerCache[nextId].selected = true
+
     return this
   }
 
@@ -178,15 +210,17 @@ class Viewer {
    * @returns {Viewer}
    */
   addLayer(layer) {
-    if (layer) {
-      if (this._layerCache[layer.id]) {
-        throw 'the layer already exists'
-      }
-      this._ready.then(() => {
-        layer.fire('add', this)
-        this._layerCache[layer.id] = layer
-      })
+    if (!layer) {
+      return this
     }
+
+    if (this._layerCache[layer.id]) {
+      throw 'the layer already exists'
+    }
+    this._ready.then(() => {
+      layer.fire('add', this)
+      this._layerCache[layer.id] = layer
+    })
     return this
   }
 
@@ -196,14 +230,15 @@ class Viewer {
    * @returns {Viewer}
    */
   removeLayer(layer) {
-    if (layer) {
-      if (!this._layerCache[layer.id]) {
-        throw 'the layer not exists'
-      }
-      this._ready.then(() => {
-        layer.fire('remove')
-      })
+    if (!layer) {
+      return this
     }
+    if (!this._layerCache[layer.id]) {
+      throw 'the layer not exists'
+    }
+    this._ready.then(() => {
+      layer.fire('remove')
+    })
     return this
   }
 
@@ -235,6 +270,9 @@ class Viewer {
    * @returns {Viewer}
    */
   flyToPosition(position) {
+    // if (this._sceneMode === SceneMode.MAP_SCENE) {
+    // } else {
+    // }
     return this
   }
 
@@ -244,19 +282,45 @@ class Viewer {
    * @returns {Viewer}
    */
   zoomToPosition(position) {
+    // if (this._sceneMode === SceneMode.MAP_SCENE) {
+    // } else {
+    // }
     return this
   }
 
+  /**
+   *
+   * @param type
+   * @param callback
+   * @returns {Viewer}
+   */
   on(type, callback) {
     return this
   }
 
+  /**
+   *
+   * @param type
+   * @param callback
+   * @returns {Viewer}
+   */
   off(type, callback) {
     return this
   }
 
-  once() {}
+  /**
+   *
+   * @param type
+   * @param callback
+   * @returns {Viewer}
+   */
+  once(type, callback) {
+    return this
+  }
 
+  /**
+   *
+   */
   remove() {}
 }
 

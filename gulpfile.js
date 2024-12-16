@@ -39,7 +39,7 @@ async function buildCSS(options) {
     ...buildConfig,
     minify: options.minify,
     entryPoints: ['src/themes/index.scss'],
-    outfile: path.join('dist', 'lib.min.css'),
+    outfile: path.join('dist', 'dm.min.css'),
   })
 }
 
@@ -49,8 +49,8 @@ async function buildModules(options) {
     await esbuild.build({
       ...buildConfig,
       format: 'iife',
-      globalName: 'lib',
-      outfile: path.join('dist', 'lib.min.js'),
+      globalName: 'DM',
+      outfile: path.join('dist', 'dm.min.js'),
     })
   }
 
@@ -58,19 +58,19 @@ async function buildModules(options) {
   if (options.node) {
     await esbuild.build({
       ...buildConfig,
-      format: 'cjs',
+      format: 'esm',
       platform: 'node',
       define: {
         TransformStream: 'null',
       },
-      outfile: path.join('dist', 'index.cjs'),
+      outfile: path.join('dist', 'index.js'),
     })
   }
 }
 
 async function regenerate(option, content) {
-  await fse.remove('dist/lib.min.js')
-  await fse.remove('dist/lib.min.css')
+  await fse.remove('dist/dm.min.js')
+  await fse.remove('dist/dm.min.css')
   await buildModules(option)
   await buildCSS(option)
 }

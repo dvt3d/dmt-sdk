@@ -1,15 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="libs/lib.min.js"></script>
-  <link rel="stylesheet" href="libs/lib.min.css">
-</head>
-<body>
-  example
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="libs/dm.min.js"></script>
+    <link rel="stylesheet" href="libs/dm.min.css" />
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .viewer-container {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewer-container" class="viewer-container"></div>
+    <script>
+      let viewer = new DM.Viewer('viewer-container')
+      let baseLayer = DM.BaseLayerFactory.createStyleBaseLayer({
+        url: 'https://demotiles.maplibre.org/style.json',
+      })
+      let baseLayer2 = DM.BaseLayerFactory.createStyleBaseLayer({
+        url: 'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+      })
+      viewer.addBaseLayer(baseLayer).addBaseLayer(baseLayer2)
+      setTimeout(() => {
+        viewer.changeBaseLayer(1)
+      }, 5000)
+
+      let layer = new DM.VectorLayer('test', 'point')
+      viewer.addLayer(layer)
+    </script>
+  </body>
 </html>

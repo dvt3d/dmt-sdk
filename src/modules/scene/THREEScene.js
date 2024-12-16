@@ -1,6 +1,4 @@
 import { THREE } from '../../name-space'
-import Logo from '../../logo/Logo'
-let logo = null
 class THREEScene {
   constructor(viewer, options = {}) {
     this._viewer = viewer
@@ -24,7 +22,6 @@ class THREEScene {
       this._viewer.canvas.clientHeight
     )
     this._controls = new THREE.OrbitControls(this._camera, this._viewer.canvas)
-    logo = new Logo(this._viewer.canvas, options)
     this._world = new THREE.Group()
     this._world.name = 'world'
     this._scene.add(this._world)
@@ -53,9 +50,6 @@ class THREEScene {
   render() {
     requestAnimationFrame(this.render.bind(this))
     this._controls.update()
-    if (logo) {
-      logo.update(this._renderer)
-    }
     if (this._camera && this._renderer) {
       this._renderer.render(this._scene, this._camera)
     }

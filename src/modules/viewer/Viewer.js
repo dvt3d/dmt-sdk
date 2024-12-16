@@ -2,7 +2,6 @@ import THREEScene from '../scene/THREEScene'
 import { MapLib, THREE } from '../../name-space'
 import { MapScene } from '@dvgis/maplibre-three-plugin'
 import { SceneMode } from '../constant'
-import Logo from '../../logo/Logo'
 
 const DEF_STYLE = {
   version: 8,
@@ -38,7 +37,6 @@ class Viewer {
       })
       this._canvas = this._map.getCanvas()
 
-      const logo = new Logo(this._canvas, this._options)
       //rename class
       containerEl.className = containerEl.className.replace(
         ' maplibregl-map',
@@ -52,13 +50,7 @@ class Viewer {
           resolve()
         })
       })
-      this._scene = new MapScene(this._map, {
-        renderLoop: (ins) => {
-          ins.renderer.resetState()
-          ins.renderer.render(ins.scene, ins.camera)
-          logo.update(ins.renderer)
-        },
-      })
+      this._scene = new MapScene(this._map, {})
     } else {
       const canvasContainer = document.createElement('div')
       canvasContainer.className = 'canvas-container'

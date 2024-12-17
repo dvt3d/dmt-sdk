@@ -1,12 +1,24 @@
 import Overlay from '../Overlay.js'
 
-const DEF_STYLE = {}
+const DEF_STYLE = {
+  size: 5,
+  color: '#ffffff',
+  blur: '0',
+  opacity: 1,
+  strokeWidth: 2,
+  strokeColor: '#0000ff',
+  strokeOpacity: 1,
+}
 
 class Point extends Overlay {
   constructor(position) {
     super()
     this._position = position
     this._style = DEF_STYLE
+  }
+
+  get type() {
+    return Overlay.getType('point')
   }
 
   /**
@@ -21,6 +33,16 @@ class Point extends Overlay {
     }
     return this
   }
+
+  /**
+   *
+   * @returns {{}}
+   */
+  toFeature() {
+    return {}
+  }
 }
+
+Overlay.registerType('point')
 
 export default Point

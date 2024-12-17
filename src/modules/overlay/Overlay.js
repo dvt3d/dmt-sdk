@@ -1,6 +1,6 @@
 import { Event } from '../event'
-
 import { Util } from '../utils'
+import OverlayType from './OverlayType'
 
 class Overlay extends Event {
   constructor() {
@@ -46,6 +46,25 @@ class Overlay extends Event {
    */
   setStyle(style) {
     return this
+  }
+
+  /**
+   *
+   * @param type
+   */
+  static registerType(type) {
+    if (type) {
+      OverlayType[type.toLocaleUpperCase()] = type.toLocaleLowerCase()
+    }
+  }
+
+  /**
+   *
+   * @param type
+   * @returns {*|undefined}
+   */
+  static getType(type) {
+    return OverlayType[type.toLocaleUpperCase()] || undefined
   }
 }
 

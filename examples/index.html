@@ -45,9 +45,9 @@
       setTimeout(() => {
         viewer.changeBaseLayer(1)
       }, 5000)
-
-      let layer = new DM.VectorLayer('test', 'point')
+      let layer = new DM.VectorLayer('test', DM.VectorType.POINT)
       viewer.addLayer(layer)
+
     </script>
   </body>
 </html>

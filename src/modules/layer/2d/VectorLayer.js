@@ -1,5 +1,4 @@
 import Layer from '../Layer'
-import GeoJsonParser from '../../parser/GeoJsonParser'
 import { Util } from '../../utils'
 import { VectorType } from '../../constant'
 
@@ -7,15 +6,16 @@ class VectorLayer extends Layer {
   constructor(id, vectorType) {
     super(id)
     this._sourceId = Util.uuid()
-    this._source = undefined
+    this._source = null
+    this._delegate = null
     this._cache = {}
     this._vectorType = vectorType
-    this._delegate = undefined
     this._dataJson = {
       type: 'FeatureCollection',
       features: [],
     }
-    this._paint = {}
+
+    this.on('overlayChanged', this._onOverlayChanged.bind(this))
   }
 
   set show(show) {
@@ -32,23 +32,12 @@ class VectorLayer extends Layer {
     return Layer.getType('vector')
   }
 
-  _onOverlayUpdate() {}
-
   /**
    *
-   * @returns {string}
    * @private
    */
-  _getGeoJsonType() {
-    switch (this._vectorType) {
-      case VectorType.POINT:
-      case VectorType.SYMBOL:
-        return 'Point'
-      case VectorType.POLYLINE:
-        return 'LineString'
-      case VectorType.POLYGON:
-      case VectorType.EXTRUSION:
-        return 'Polygon'
+  _onOverlayChanged() {
+    if (this._viewer) {
     }
   }
 
@@ -65,6 +54,36 @@ class VectorLayer extends Layer {
         return 'line'
       case VectorType.POLYGON:
         return 'fill'
+      case VectorType.SYMBOL:
+      case VectorType.LABEL:
+        return 'symbol'
+      case VectorType.EXTRUSION:
+        return 'fill-extrusion'
+    }
+    return ''
+  }
+
+  /**
+   *
+   * @returns {string}
+   * @private
+   */
+  _getLayerPaint() {
+    switch (this._vectorType) {
+      case VectorType.POINT:
+        return {
+          'circle-radius': ['get', 'size'],
+          'circle-color': ['get', 'color'],
+          'circle-blur': ['get', 'blur'],
+          'circle-opacity': ['get', 'opacity'],
+          'circle-stroke-width': ['get', 'strokeWidth'],
+          'circle-stroke-color': ['get', 'strokeColor'],
+          'circle-stroke-opacity': ['get', 'strokeOpacity'],
+        }
+      case VectorType.POLYLINE:
+        return 'line'
+      case VectorType.POLYGON:
+        return 'fill'
     }
   }
 
@@ -75,20 +94,37 @@ class VectorLayer extends Layer {
    */
   _onAdd(viewer) {
     this._viewer = viewer
-    viewer.map.addSource(this._sourceId, {
+    this._viewer.map.addSource(this._sourceId, {
       type: 'geojson',
       data: this._dataJson,
+      filter: ['==', ['get', 'show'], true],
     })
-    viewer.map.addLayer({
+    this._viewer.map.addLayer({
       id: this._id,
-      type: this._getGeoJsonType(),
+      type: this._getLayerType(),
       source: this._sourceId,
-      paint: this._paint,
+      paint: this._getLayerPaint(),
     })
-    this._delegate = viewer.map.getLayer(this._id)
+    this._source = this._viewer.map.getSource(this._sourceId)
+    this._delegate = this._viewer.map.getLayer(this._id)
   }
 
-  _onRemove() {}
+  /**
+   *
+   * @private
+   */
+  _onRemove() {
+    if (this._viewer) {
+      if (this._viewer.map.getLayer(this._id)) {
+        this._viewer.map.removeLayer(this._id)
+        this._delegate = null
+      }
+      if (this._viewer.map.getSource(this._sourceId)) {
+        this._viewer.map.removeSource(this._sourceId)
+        this._source = null
+      }
+    }
+  }
 
   /**
    *
@@ -97,19 +133,13 @@ class VectorLayer extends Layer {
    */
   addOverlay(overlay) {
     if (this._cache[overlay.overlayId]) {
-      throw 'overlay already exists'
+      throw `overlay ${overlay.overlayId} already exists`
     }
+    this._dataJson.features.push(overlay.toFeature())
     this._cache[overlay.overlayId] = overlay
-
-    let data = []
-    // for ()
-    this._dataJson = GeoJsonParser.parseOverlaysToGeoJson(
-      [overlay],
-      this._getGeoJsonType()
-    )
-    if (this._viewer) {
-      let source = this._viewer.map.getSource(this._sourceId)
-      source.updateData(this._dataJson)
+    overlay.fire('add', this)
+    if (this._source) {
+      this._source.setData(this._dataJson)
     }
     return this
   }
@@ -120,48 +150,34 @@ class VectorLayer extends Layer {
    * @returns {VectorLayer}
    */
   addOverlays(overlays) {
-    let data = []
-    for (let i = 0; i < overlays.length; i++) {
+    for (let overlay of overlays) {
       try {
-        let overlay = overlays[i]
         if (this._cache[overlay.overlayId]) {
-          throw 'overlay already exists'
+          throw `overlay ${overlay.overlayId} already exists`
         }
+        this._dataJson.features.push(overlay.toFeature())
         this._cache[overlay.overlayId] = overlay
-        data.push({
-          id: overlay.id,
-          coords: [overlay.position.x, overlay.position.y],
-        })
+        overlay.fire('add', this)
       } catch (e) {
         console.error(e)
       }
     }
-    this._dataJson = GeoJsonParser.parseOverlaysToGeoJson(
-      data,
-      this._getGeoJsonType()
-    )
-    if (this._viewer) {
-      let source = this._viewer.map.getSource(this._sourceId)
-      source.updateData(this._dataJson)
+    if (this._source) {
+      this._source.setData(this._dataJson)
     }
     return this
   }
 
   /**
    *
-   * @param overlay
    * @returns {VectorLayer}
    */
-  removeOverlay(overlay) {
-    return this
-  }
-
-  /**
-   *
-   * @param overlays
-   * @returns {VectorLayer}
-   */
-  removeOverlays(overlays) {
+  clear() {
+    this._dataJson.features = []
+    if (this._source) {
+      this._source.setData(this._dataJson)
+    }
+    this._cache = {}
     return this
   }
 }

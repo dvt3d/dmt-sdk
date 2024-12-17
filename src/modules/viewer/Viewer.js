@@ -116,7 +116,7 @@ class Viewer {
       throw 'this scene mode not support the function'
     }
     if (this._baseLayerCache[baseLayer.id]) {
-      throw 'the base layer already exists'
+      throw `the base layer ${baseLayer.id}  already exists`
     }
     baseLayer.fire('add', this)
     this._baseLayerCache[baseLayer.id] = baseLayer
@@ -144,7 +144,7 @@ class Viewer {
       throw 'this scene mode not support the function'
     }
     if (!this._baseLayerCache[baseLayer.id]) {
-      throw 'the baseLayer not exits'
+      throw `the baseLayer ${baseLayer.id} not exits`
     }
     baseLayer.fire('remove')
     delete this._baseLayerCache[baseLayer.id]
@@ -215,7 +215,7 @@ class Viewer {
     }
 
     if (this._layerCache[layer.id]) {
-      throw 'the layer already exists'
+      throw `the layer ${layer.id} already exists`
     }
     this._ready.then(() => {
       layer.fire('add', this)
@@ -234,7 +234,7 @@ class Viewer {
       return this
     }
     if (!this._layerCache[layer.id]) {
-      throw 'the layer not exists'
+      throw `the layer ${layer.id} not exists`
     }
     this._ready.then(() => {
       layer.fire('remove')

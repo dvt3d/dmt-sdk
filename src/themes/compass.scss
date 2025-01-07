@@ -1,0 +1,87 @@
+.widget.compass {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0px 0px 2px 2px #cecece;
+
+  svg {
+    pointer-events: none;
+  }
+
+  .bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(
+      transparent 14px,
+      #cecece 14.5px,
+      #ffffff 16.5px
+    );
+    pointer-events: none;
+  }
+
+  .rotate-left,
+  .rotate-right,
+  .pitch-up,
+  .pitch-down {
+    position: absolute;
+    color: #bdbdbd;
+    &:hover {
+      color: #4285f4;
+    }
+  }
+
+  .rotate-left,
+  .rotate-right {
+    height: 40px;
+    width: 15px;
+    top: 10px;
+    svg {
+      transform: translateY(-10px);
+    }
+  }
+
+  .rotate-right {
+    right: 5px;
+    svg {
+      transform: translate(-44px, -10px);
+    }
+  }
+
+  .pitch-up,
+  .pitch-down {
+    width: 15px;
+    height: 15px;
+    left: 23px;
+    svg {
+      transform: translateX(-23px);
+    }
+  }
+
+  .pitch-down {
+    bottom: 2px;
+    svg {
+      transform: translate(-23px, -46px);
+    }
+  }
+
+  .inner {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    background: #fff;
+    border-radius: 50%;
+    svg {
+      transform: translate(-25%, -25%);
+    }
+  }
+}

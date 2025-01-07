@@ -1,22 +1,19 @@
-import { Event } from '../event'
-import { Util } from '../utils'
-
-class BaseLayer extends Event {
+class BaseLayer {
   constructor(provider, options = {}) {
-    super()
     this._provider = provider
     this._options = options
-    this._viewer = undefined
-    this._id = Util.uuid()
-    this.on('add', this._onAdd.bind(this))
-  }
-
-  get id() {
-    return this._id
   }
 
   get provider() {
     return this._provider
+  }
+
+  get id() {
+    return this._provider.id
+  }
+
+  get type() {
+    return this._provider.type
   }
 
   set selected(selected) {
@@ -25,22 +22,6 @@ class BaseLayer extends Event {
 
   get selected() {
     return this._provider.selected
-  }
-
-  /**
-   *
-   * @param {*} viewer
-   */
-  _onAdd(viewer) {
-    if (viewer.only3d) {
-      throw 'baseLayer can not used for only3d mode'
-    }
-    this._viewer = viewer
-    this._provider.fire('add', viewer)
-  }
-
-  onRemove() {
-    this._provider.fire('remove')
   }
 }
 

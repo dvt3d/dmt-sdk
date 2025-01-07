@@ -7,47 +7,229 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <script src="libs/dm.min.js"></script>
-    <link rel="stylesheet" href="libs/dm.min.css" />
-
+    <title>DM SDK examples</title>
+    <script src="./jquery.min.js"></script>
+    <script src="./jquery.accordion.js"></script>
     <style>
       * {
-        padding: 0;
         margin: 0;
+        padding: 0;
       }
-
       html,
       body {
         width: 100%;
         height: 100%;
         overflow: hidden;
       }
+      .container {
+        display: flex;
+        height: 100%;
+      }
 
-      .viewer-container {
+      .example-list::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        /**/
+      }
+      .example-list::-webkit-scrollbar-track {
+        background: #424242;
+      }
+      .example-list::-webkit-scrollbar-thumb {
+        background: #686868;
+        max-height: 20px;
+      }
+
+      .nav {
+        width: 250px;
+        height: 100%;
+        overflow: hidden;
+        background: #222;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+      }
+      .example {
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      iframe {
         width: 100%;
         height: 100%;
         overflow: hidden;
       }
+
+      .nav .banner {
+        padding: 20px 20px 0 20px;
+        color: #1e80ff;
+        font-weight: bold;
+        font-style: italic;
+      }
+      .example-list-wrapper {
+        flex: 1;
+        overflow: hidden;
+        user-select: none;
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .example-list {
+        flex: 1;
+        overflow: hidden;
+        overflow-y: auto;
+      }
+
+      .example-list-wrapper .desc {
+        height: 150px;
+      }
+
+      .example-list .example-item {
+        border-top: 1px solid #444;
+      }
+
+      .example-list h4 {
+        padding-left: 20px;
+        font-size: 14px;
+        margin: 7px 0;
+        color: #bcbcbc;
+      }
+
+      .example-list h4:hover,
+      .example-list ul li:hover {
+        cursor: pointer;
+      }
+
+      .example-list ul {
+        padding-left: 35px;
+        list-style: none;
+        margin-top: 5px;
+        background: #181717;
+      }
+
+      .example-list ul li {
+        margin: 5px 0;
+        font-size: 13px;
+      }
+
+      .example-list ul li:hover a,
+      .example-list ul li.active a {
+        color: #1e80ff;
+      }
+
+      .example-list ul li:hover,
+      .example-list ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      #code-link {
+        position: fixed;
+        bottom: 16px;
+        left: 270px;
+        padding: 8px;
+        border-radius: 50%;
+        margin-bottom: 0;
+        background-color: #fff;
+        opacity: 0.9;
+        z-index: 999;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        display: flex;
+      }
+
+      #code-link img {
+        width: 30px;
+      }
     </style>
   </head>
   <body>
-    <div id="viewer-container" class="viewer-container"></div>
-    <script>
-      let viewer = new DM.Viewer('viewer-container')
-      let baseLayer = DM.BaseLayerFactory.createStyleBaseLayer({
-        url: 'https://demotiles.maplibre.org/style.json',
-      })
-      let baseLayer2 = DM.BaseLayerFactory.createStyleBaseLayer({
-        url: 'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-      })
-      viewer.addBaseLayer(baseLayer).addBaseLayer(baseLayer2)
-      setTimeout(() => {
-        viewer.changeBaseLayer(1)
-      }, 5000)
-      let layer = new DM.VectorLayer('test', DM.VectorType.POINT)
-      viewer.addLayer(layer)
+    <div class="container">
+      <div class="nav">
+        <div class="banner">DM-SDK v1.0.0</div>
+        <div class="example-list-wrapper">
+          <div
+            id="example-list"
+            class="example-list"
+            data-accordion-group
+          ></div>
+          <div class="desc"></div>
+        </div>
+      </div>
+      <div class="example">
+        <iframe
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          id="inner-page"
+          name="inner-page"
+          style="border: 0"
+          allow="fullscreen; xr-spatial-tracking;"
+        >
+        </iframe>
+        <a id="code-link" href="" target="_blank"
+          ><img src="./assets/icon/code.svg" title="源码" alt="“”"
+        /></a>
+      </div>
 
-    </script>
+      <script src="./list.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          let href = undefined
+          let $currentPage = undefined
+          if (window.location.href.indexOf('#') > -1) {
+            let hrefArr = window.location.href.split('#')
+            if (hrefArr[1]) {
+              href = hrefArr[1].replace('_', '/')
+            }
+            $('#code-link').attr(
+              'href',
+              'https://github.com/dvgis/dm-sdk/blob/master/examples/' + href
+            )
+          }
+          $('#inner-page').attr('src', href || 'info/start.html')
+
+          EXAMPLE_LIST.forEach((item) => {
+            let $section = $('<div data-accordion ></div>')
+            $section.addClass('example-item')
+            let $title = $('<h4 data-control ></h4>').text(item.name)
+            $title.appendTo($section)
+            let $pageWrapper = $('<ul data-content></ul>')
+            $pageWrapper.appendTo($section)
+            if (item.children) {
+              item.children.forEach((child) => {
+                let $page = $('<li></li>')
+                let $link = $('<a></a>').text(child.name)
+                $link
+                  .attr('href', item.folder + '/' + child.page)
+                  .attr('target', 'inner-page')
+                $link.bind('click', (e) => {
+                  if ($currentPage) {
+                    $currentPage.removeClass('active')
+                  }
+                  window.location.href =
+                    window.location.href.replace(/#\w*\.?\w*/g, '') +
+                    '#' +
+                    item.folder +
+                    '_' +
+                    child.page
+                  $page.addClass('active')
+                  $('#code-link').attr(
+                    'href',
+                    'https://github.com/dvgis/dm-sdk/blob/master/examples/' +
+                      item.folder +
+                      '/' +
+                      child.page
+                  )
+                  $currentPage = $page
+                })
+                $page.append($link)
+                $pageWrapper.append($page)
+              })
+            }
+            $section.appendTo($('#example-list'))
+          })
+          $('#example-list [data-accordion]').accordion()
+        })
+      </script>
+    </div>
   </body>
 </html>

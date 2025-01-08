@@ -1,3 +1,4 @@
+import BaseLayerType from './BaseLayerType'
 import BaseLayer from './BaseLayer'
 import AMapProvider from './provider/AMapProvider.js'
 import StyleProvider from './provider/StyleProvider'
@@ -29,6 +30,25 @@ class BaseLayerFactory {
    */
   static createAMapBaseLayer(options = {}) {
     return new BaseLayer(new AMapProvider(options), options)
+  }
+
+  /**
+   *
+   * @param type
+   * @param options
+   * @returns {BaseLayer|null}
+   */
+  static createBaseLayer(type, options = {}) {
+    switch (type) {
+      case BaseLayerType.STYLE:
+        return this.createStyleBaseLayer(options)
+      case BaseLayerType.AMAP:
+        return this.createAMapBaseLayer(options)
+      case BaseLayerType.XYZ:
+        return this.createXYZBaseLayer(options)
+      default:
+        return null
+    }
   }
 }
 

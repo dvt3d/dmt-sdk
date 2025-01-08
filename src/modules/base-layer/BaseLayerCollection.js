@@ -22,7 +22,6 @@ class BaseLayerCollection extends Event {
 
   _onAdd(viewer) {
     this._viewer = viewer
-
     this._baseLayers.forEach((item) => {
       item.provider.fire('add', viewer)
     })
@@ -49,6 +48,8 @@ class BaseLayerCollection extends Event {
    */
   remove(baseLayer) {
     baseLayer.selected = false
+    let index = this._baseLayers.findIndex((item) => item.id === baseLayer.id)
+    this._baseLayers.splice(index, 1)
     return this
   }
 

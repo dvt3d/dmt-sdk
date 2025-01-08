@@ -37,7 +37,7 @@ const buildConfig = {
 async function buildCSS(options) {
   await esbuild.build({
     ...buildConfig,
-    minify: options.minify,
+    minify: !!options.minify,
     entryPoints: ['src/themes/index.scss'],
     outfile: path.join('dist', 'dm.min.css'),
   })
@@ -50,6 +50,7 @@ async function buildModules(options) {
       ...buildConfig,
       format: 'iife',
       globalName: 'DM',
+      minify: !!options.minify,
       outfile: path.join('dist', 'dm.min.js'),
     })
   }
@@ -60,6 +61,7 @@ async function buildModules(options) {
       ...buildConfig,
       format: 'esm',
       platform: 'node',
+      minify: options.minify,
       define: {
         TransformStream: 'null',
       },
@@ -114,5 +116,11 @@ export const buildNode = gulp.series(
 export const build = gulp.series(
   () => buildModules({ iife: true }),
   () => buildModules({ node: true }),
+  () => buildCSS({ minify: true })
+)
+
+export const buildRelease = gulp.series(
+  () => buildModules({ iife: true, minify: true }),
+  () => buildModules({ node: true, minify: true }),
   () => buildCSS({ minify: true })
 )

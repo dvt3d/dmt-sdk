@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+  />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <script src="../libs/dm.min.js"></script>
+
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+      }
+      html,
+      body {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      .viewer-container {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+<div id="viewer-container" class="viewer-container"></div>
+
+<script>
+  let viewer = new DM.Viewer('viewer-container')
+  let baseLayer = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.STYLE,{
+    url: 'https://demotiles.maplibre.org/style.json',
+  })
+  viewer.addBaseLayer(baseLayer)
+  window.viewer = viewer
+</script>
+</script>
+</body>
+</html>

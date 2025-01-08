@@ -1,4 +1,5 @@
 import { Event } from '../../event'
+import BaseLayerType from '../BaseLayerType'
 
 class XYZProvider extends Event {
   constructor(options = {}) {
@@ -19,4 +20,5 @@ class XYZProvider extends Event {
   }
 }
 
+BaseLayerType.XYZ = 'xyz'
 export default XYZProvider

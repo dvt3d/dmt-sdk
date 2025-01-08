@@ -11,6 +11,8 @@
     "build": "rimraf dist && gulp build",
     "build:node": "rimraf dist && gulp buildNode",
     "build:iife": "rimraf dist && gulp buildIIFE",
+    "build:release": "rimraf dist && gulp buildRelease",
+    "prepublishOnly": "yarn run build:release",
     "lint": "eslint --fix src"
   },
   "devDependencies": {

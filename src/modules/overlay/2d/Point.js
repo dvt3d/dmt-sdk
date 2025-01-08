@@ -39,7 +39,14 @@ class Point extends Overlay {
    * @returns {{}}
    */
   toFeature() {
-    return {}
+    return {
+      type: 'Point',
+      properties: {
+        overlayId: this._overlayId,
+        id: this._bid,
+        show: this._show,
+      },
+    }
   }
 }
 

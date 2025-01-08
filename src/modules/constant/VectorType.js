@@ -1,8 +1,8 @@
-const POINT = 0
-const POLYLINE = 1
-const POLYGON = 2
-const SYMBOL = 3
-const EXTRUSION = 4
-const LABEL = 5
+const POINT = 'point'
+const POLYLINE = 'polyline'
+const POLYGON = 'polygon'
+const SYMBOL = 'symbol'
+const EXTRUSION = 'extrusion'
+const LABEL = 'label'
 
 export { POINT, POLYLINE, POLYGON, SYMBOL, EXTRUSION, LABEL }

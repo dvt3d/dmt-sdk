@@ -14,7 +14,6 @@ class VectorLayer extends Layer {
       type: 'FeatureCollection',
       features: [],
     }
-
     this.on('overlayChanged', this._onOverlayChanged.bind(this))
   }
 
@@ -32,12 +31,11 @@ class VectorLayer extends Layer {
     return Layer.getType('vector')
   }
 
-  /**
-   *
-   * @private
-   */
-  _onOverlayChanged() {
+  _onOverlayChanged(overlay) {
     if (this._viewer) {
+      let index = this._dataJson.features.findIndex(
+        (item) => item.properties.overlayId === overlay.overlayId
+      )
     }
   }
 

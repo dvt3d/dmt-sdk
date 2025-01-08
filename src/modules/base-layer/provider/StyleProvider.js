@@ -7,10 +7,6 @@ class StyleProvider extends Event {
     this._url = options.url
     this._data = options.data
     this._selected = false
-    this._filter = {
-      show: [],
-      hide: [],
-    }
     this.on('add', this._onAdd.bind(this))
   }
 
@@ -61,5 +57,7 @@ class StyleProvider extends Event {
     return this
   }
 }
+
 BaseLayerType.STYLE = 'style'
+
 export default StyleProvider

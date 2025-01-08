@@ -4,6 +4,11 @@ class Event {
   constructor() {
     this._dispatcher = new EventDispatcher()
   }
+
+  get type() {
+    return 'event'
+  }
+
   /**
    * @param type
    * @param callback

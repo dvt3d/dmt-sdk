@@ -12,6 +12,7 @@
   "plugins": ["prettier"],
   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "globals": {
+    "__cmdOut":false
   },
   "rules": {
     "global-require": 0,

@@ -4,10 +4,6 @@ const EXAMPLE_LIST = [
     folder: 'info',
     children: [
       {
-        name: '开始',
-        page: 'start.html',
-      },
-      {
         name: '地图模式',
         page: 'map_scene.html',
       },

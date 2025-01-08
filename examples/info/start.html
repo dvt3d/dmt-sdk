@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>start</title>
     <script src="../libs/dm.min.js"></script>
 
     <style>
@@ -31,21 +31,8 @@
   </head>
   <body>
     <div id="viewer-container" class="viewer-container"></div>
-
     <script>
       let viewer = new DM.Viewer('viewer-container')
-      let baseLayer_elec = DM.BaseLayerFactory.createAMapBaseLayer()
-      let baseLayer_img = DM.BaseLayerFactory.createAMapBaseLayer({
-        style:'img'
-      })
-      let baseLayer_cva = DM.BaseLayerFactory.createAMapBaseLayer({
-        style:'cva'
-      })
-
-      viewer.addBaseLayer([baseLayer_img,baseLayer_cva])
-      // console.log(viewer)
-      window.viewer = viewer
-    </script>
     </script>
   </body>
 </html>

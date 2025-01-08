@@ -13,6 +13,7 @@ class AMapProvider extends Event {
     super()
     this._id = Util.uuid()
     this._options = options
+    this._map = undefined
     this.on('add', this._onAdd.bind(this))
   }
 
@@ -26,7 +27,7 @@ class AMapProvider extends Event {
 
   set selected(selected) {
     this._selected = selected
-    if (!this._viewer) {
+    if (!this._map) {
       return
     }
     if (this._selected) {
@@ -41,27 +42,28 @@ class AMapProvider extends Event {
       subdomains.forEach((subdomain) => {
         tiles.add(url.replace('{s}', subdomain))
       })
-      this._viewer.map.addSource(this._id, {
+      this._map.addSource(this._id, {
         type: 'raster',
         tiles: [...tiles],
         minzoom: this._options.minZoom || 0,
         maxzoom: this._options.maxZoom || 22,
         tileSize: this._options.tileSize || 256,
       })
-      this._viewer.map.addLayer(
+
+      this._map.addLayer(
         {
           id: this._id,
           type: 'raster',
           source: this._id,
         },
-        'map_scene_layer'
+        this._map.getLayer('map_scene_layer') ? 'map_scene_layer' : null
       )
     } else {
-      if (this._viewer.getLayer(this._id)) {
-        this._viewer.removeLayer(this._id)
+      if (this._map.getLayer(this._id)) {
+        this._map.removeLayer(this._id)
       }
-      if (this._viewer.map.getSource(this._id)) {
-        this._viewer.removeSource(this._id)
+      if (this._map.getSource(this._id)) {
+        this._map.removeSource(this._id)
       }
     }
   }
@@ -72,11 +74,11 @@ class AMapProvider extends Event {
 
   /**
    *
-   * @param viewer
+   * @param map
    * @private
    */
-  _onAdd(viewer) {
-    this._viewer = viewer
+  _onAdd(map) {
+    this._map = map
   }
 }
 

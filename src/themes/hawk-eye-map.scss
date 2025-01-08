@@ -1,0 +1,16 @@
+.widget.hawk-eye-map {
+  position: absolute;
+  top: 30px;
+  right:30px;
+  width: 150px;
+  height: 150px;
+  user-select: none;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid orange;
+  box-shadow: 2px 2px 3px #2b2b2b;
+  background: #fff;
+  .canvas-container {
+    pointer-events: none;
+  }
+}

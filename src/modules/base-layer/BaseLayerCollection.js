@@ -5,7 +5,7 @@ class BaseLayerCollection extends Event {
     super()
     this._baseLayers = []
     this._selected = false
-    this._viewer = undefined
+    this._map = undefined
     this.on('add', this._onAdd.bind(this))
   }
 
@@ -20,10 +20,10 @@ class BaseLayerCollection extends Event {
     return this._selected
   }
 
-  _onAdd(viewer) {
-    this._viewer = viewer
+  _onAdd(map) {
+    this._map = map
     this._baseLayers.forEach((item) => {
-      item.provider.fire('add', viewer)
+      item.provider.fire('add', this._map)
     })
   }
 
@@ -35,6 +35,11 @@ class BaseLayerCollection extends Event {
   add(baseLayer) {
     let element = this._baseLayers.find((item) => item.id === baseLayer.id)
     if (element) {
+      return this
+    }
+    let type = this._baseLayers[0]?.type
+    if (type && type !== baseLayer.type) {
+      console.warn('not supported the different base layer type ')
       return this
     }
     this._baseLayers.push(baseLayer)
@@ -78,7 +83,7 @@ class BaseLayerCollection extends Event {
    * @returns
    */
   getType() {
-    return this._baseLayers[0].type
+    return this._baseLayers[0]?.type
   }
 }
 

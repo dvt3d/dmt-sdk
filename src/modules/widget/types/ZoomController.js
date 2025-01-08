@@ -10,7 +10,6 @@ class ZoomController extends Widget {
   constructor() {
     super()
     this._wrapper = DomUtil.create('div', 'widget zoom-controller')
-    this._inner = undefined
   }
 
   _mountContent() {

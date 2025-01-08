@@ -7,6 +7,7 @@ class StyleProvider extends Event {
     this._url = options.url
     this._data = options.data
     this._selected = false
+    this._map = undefined
     this.on('add', this._onAdd.bind(this))
   }
 
@@ -16,9 +17,8 @@ class StyleProvider extends Event {
 
   set selected(selected) {
     this._selected = selected
-    if (this._viewer && selected) {
-      this._viewer.map.once('style.load', this._onStyleLoad.bind(this))
-      this._viewer.map.setStyle(this._url || this._data, { diff: false })
+    if (this._map && selected) {
+      this._map.setStyle(this._url || this._data, { diff: false })
     }
   }
 
@@ -28,24 +28,11 @@ class StyleProvider extends Event {
 
   /**
    *
-   * @param viewer
+   * @param map
    * @private
    */
-  _onAdd(viewer) {
-    this._viewer = viewer
-  }
-
-  /**
-   *
-   * @private
-   */
-  _onStyleLoad() {
-    let layers = this._viewer.getLayers()
-    for (let i = 0; i < layers.length; i++) {
-      let layer = layers[i]
-      delete this._viewer._layerCache[layer.id]
-      this._viewer.addLayer(layer)
-    }
+  _onAdd(map) {
+    this._map = map
   }
 
   /**

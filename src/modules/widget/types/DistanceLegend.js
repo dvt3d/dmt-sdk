@@ -9,7 +9,6 @@ class DistanceLegend extends Widget {
   constructor() {
     super()
     this._wrapper = DomUtil.create('div', 'widget distance-legend')
-    this._inner = undefined
   }
 
   _mountContent() {

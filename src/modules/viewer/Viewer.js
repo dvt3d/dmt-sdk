@@ -130,10 +130,11 @@ class Viewer {
 
   /**
    *
-   * @param {*} baseLayer
-   * @returns
+   * @param baseLayer
+   * @param options
+   * @returns {Viewer}
    */
-  addBaseLayer(baseLayer, options) {
+  addBaseLayer(baseLayer, options = {}) {
     if (!baseLayer) {
       return this
     }
@@ -164,7 +165,7 @@ class Viewer {
       if (this._baseLayerCache[baseLayerCollection.getId()]) {
         throw `the base layer already exists`
       }
-      baseLayerCollection.fire('add', this)
+      baseLayerCollection.fire('add', this._map)
       this._baseLayerCache[baseLayerCollection.getId()] = baseLayerCollection
       //If no base layer is selected in the viewer, the first one will be selected by default.
       let hasSelected = false
@@ -228,14 +229,12 @@ class Viewer {
       }
 
       this._baseLayerCache[currentId].selected = false
-      //change vec to raster , needs readd the 2d layers
-      if (
-        this._baseLayerCache[currentId].getType() === BaseLayerType.STYLE &&
-        this._baseLayerCache[nextId].getType() !== BaseLayerType.STYLE
-      ) {
+
+      //change vector base layer, needs reAdd the 2d layers
+      if (this._baseLayerCache[currentId].getType() === BaseLayerType.STYLE) {
         const reloadLayers = () => {
-          let layers = this.getLayers().filter(
-            (layer) => LayerType.VECTOR === layer.type
+          let layers = this.getLayers().filter((layer) =>
+            [LayerType.VECTOR, LayerType.CLUSTER].includes(layer.type)
           )
           for (let i = 0; i < layers.length; i++) {
             let layer = layers[i]

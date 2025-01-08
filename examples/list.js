@@ -31,7 +31,7 @@ const EXAMPLE_LIST = [
       },
       {
         name: '鹰眼图',
-        page: 'hawkeye_map.html',
+        page: 'hawk_eye_map.html',
       },
       {
         name: '右击菜单',

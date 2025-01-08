@@ -7,8 +7,9 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>start</title>
+    <title>map scene</title>
     <script src="../libs/dm.min.js"></script>
+    <link href="../libs/dm.min.css" rel="stylesheet" />
 
     <style>
       * {
@@ -33,11 +34,15 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = new DM.Viewer('viewer-container')
-      let baseLayer = DM.BaseLayerFactory.createStyleBaseLayer({
-        url: 'https://demotiles.maplibre.org/style.json',
-      })
-      viewer.addBaseLayer(baseLayer)
+      let viewer = undefined
+      function initViewer(){
+        viewer = new DM.Viewer('viewer-container')
+        let baseLayer = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.STYLE,{
+          url: 'https://demotiles.maplibre.org/style.json',
+        })
+        viewer.addBaseLayer(baseLayer)
+      }
+      DM.ready().then(initViewer)
     </script>
   </body>
 </html>

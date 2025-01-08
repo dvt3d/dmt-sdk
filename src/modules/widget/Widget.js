@@ -21,6 +21,10 @@ class Widget extends Event {
     return this._enabled
   }
 
+  _bindEvent() {}
+
+  _unbindEvent() {}
+
   /**
    *
    */
@@ -29,7 +33,9 @@ class Widget extends Event {
     if (this._enabled) {
       !this._wrapper.parentNode &&
         this._viewer.widgetContainer.appendChild(this._wrapper)
+      this._bindEvent()
     } else {
+      this._unbindEvent()
       this._wrapper.parentNode &&
         this._viewer.widgetContainer.removeChild(this._wrapper)
     }

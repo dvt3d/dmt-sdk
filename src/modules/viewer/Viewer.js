@@ -7,6 +7,7 @@ import { LayerType } from '../layer'
 import { MouseEvent } from '../event'
 import { DomUtil } from '../utils'
 import { createWidgets } from '../widget'
+import { getParam } from '../../global-api/index.js'
 
 const DEF_STYLE = {
   version: 8,
@@ -20,6 +21,9 @@ const DEF_OPTS = {
 
 class Viewer {
   constructor(container, options = {}) {
+    if (!getParam('isInitialized')) {
+      throw 'the sdk is not initialized, please do the ready function '
+    }
     this._container = container
     this._options = {
       ...DEF_OPTS,

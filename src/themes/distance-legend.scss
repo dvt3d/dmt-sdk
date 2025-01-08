@@ -1,0 +1,16 @@
+.widget.distance-legend {
+  position: absolute;
+  width: 100px;
+  height: 20px;
+  left: 80px;
+  bottom: 20px;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid #000 ;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+
+}

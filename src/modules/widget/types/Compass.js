@@ -1,3 +1,6 @@
+/**
+ * @Author: Caven Chen
+ */
 import {
   compass_inner,
   compass_pitch_down,
@@ -7,6 +10,7 @@ import {
 } from '../../icons'
 import { DomUtil } from '../../utils'
 import Widget from '../Widget'
+import { SceneMode } from '../../constant'
 
 class Compass extends Widget {
   constructor() {
@@ -90,9 +94,7 @@ class Compass extends Widget {
         break
       }
     }
-    this._inner.style.cssText = `transform: rotateX(${-(
-      pitch + deltaPitch
-    )}deg) rotateZ(${-(bearing + deltaBearing)}deg);`
+
     this._viewer.map.easeTo({
       pitch: pitch + deltaPitch,
       bearing: bearing + deltaBearing,
@@ -104,7 +106,6 @@ class Compass extends Widget {
 
   _reset(e) {
     e.preventDefault()
-    this._inner.style.cssText = `transform: rotateX(0deg) rotateZ(0deg);`
     this._viewer.map.easeTo({
       bearing: 0,
       pitch: 0,
@@ -115,12 +116,36 @@ class Compass extends Widget {
   }
 
   _installHook() {
-    const self = this
-    Object.defineProperty(this._viewer, 'compass', {
-      get() {
-        return self
-      },
-    })
+    if (this._viewer.sceneMode === SceneMode.MAP_SCENE) {
+      const self = this
+      Object.defineProperty(this._viewer, 'compass', {
+        get() {
+          return self
+        },
+      })
+    }
+  }
+
+  _onRotate() {
+    let pitch = this._viewer.map.getPitch()
+    let bearing = this._viewer.map.getBearing()
+    this._inner.style.cssText = `transform: rotateX(${-pitch}deg) rotateZ(${-bearing}deg);`
+  }
+
+  _onPitch() {
+    let pitch = this._viewer.map.getPitch()
+    let bearing = this._viewer.map.getBearing()
+    this._inner.style.cssText = `transform: rotateX(${-pitch}deg) rotateZ(${-bearing}deg);`
+  }
+
+  _bindEvent() {
+    this._viewer.map.on('rotate', this._onRotate.bind(this))
+    this._viewer.map.on('pitch', this._onPitch.bind(this))
+  }
+
+  _unbindEvent() {
+    this._viewer.map.off('rotate', this._onRotate.bind(this))
+    this._viewer.map.off('pitch', this._onPitch.bind(this))
   }
 }
 

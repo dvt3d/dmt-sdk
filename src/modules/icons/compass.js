@@ -1,9 +1,3 @@
-const compass_bg = `
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7121" width="64" height="64">
-   <path d="M63.33 512.22c0 160.05 85.39 307.95 224 387.98 138.61 80.02 309.39 80.02 448 0 138.61-80.03 224-227.93 224-387.98 0-247.42-200.58-448-448-448s-448 200.58-448 448z m0 0" fill="currentColor" ></path>
-</svg>`
-
 const compass_rotate_left = `
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7121" width="64" height="64">
@@ -37,7 +31,6 @@ const compass_pitch_down = `
 </svg>`
 
 export {
-  compass_bg,
   compass_rotate_left,
   compass_rotate_right,
   compass_inner,

@@ -1,1 +1,3 @@
-@import './compass.scss';
+@use './compass.scss';
+@use './zoom-controller.scss';
+@use './distance-legend.scss';

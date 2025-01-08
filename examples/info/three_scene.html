@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>start</title>
+    <title>three scene</title>
     <script src="../libs/dm.min.js"></script>
 
     <style>
@@ -33,13 +33,17 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = new DM.Viewer('viewer-container', {
-        sceneMode: DM.SceneMode.THREE_SCENE,
-      })
-      let layer = new DM.MeshLayer('layer')
-      viewer.addLayer(layer)
-      let box = new DM.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
-      layer.addOverlay(box)
+      let viewer = undefined
+      function  initViewer(){
+        viewer = new DM.Viewer('viewer-container', {
+          sceneMode: DM.SceneMode.THREE_SCENE,
+        })
+        let layer = new DM.MeshLayer('layer')
+        viewer.addLayer(layer)
+        let box = new DM.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
+        layer.addOverlay(box)
+      }
+      DM.ready().then(initViewer)
     </script>
   </body>
 </html>

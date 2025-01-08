@@ -26,7 +26,7 @@ export function ready(options = {}) {
   if (__isInitialized) {
     return Promise.resolve()
   }
-  __cmdOut && __cmdOut()
+  // __cmdOut && __cmdOut()
 
   return new Promise((resolve) => {
     if (options['baseUrl']) {
@@ -35,6 +35,7 @@ export function ready(options = {}) {
     __isInitialized = true
     setParam('baseUrl', options.baseUrl)
     setParam('isInitialized', __isInitialized)
+    resolve()
   }).catch((e) => {
     throw new Error(e.message)
   })

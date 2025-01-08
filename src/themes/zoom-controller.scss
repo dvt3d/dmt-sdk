@@ -1,0 +1,33 @@
+.widget.zoom-controller {
+  position: absolute;
+  width: 30px;
+  height: 60px;
+  top: 95px;
+  right: 37px;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 5px;
+  overflow: hidden;
+  background:#fff;
+  box-shadow: 0px 0px 2px 2px #cecece;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-top: 10px;
+  svg {
+    pointer-events: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  .zoom-in ,
+  .zoom-out{
+    color: #bdbdbd;
+    &:hover {
+      color: #4285f4;
+    }
+  }
+
+}

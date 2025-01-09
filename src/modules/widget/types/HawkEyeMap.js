@@ -21,6 +21,7 @@ class HawkEyeMap extends Widget {
     this._map = undefined
     this._promise = undefined
     this._baseLayerCollection = new BaseLayerCollection()
+    this._moveListener = this._onMove.bind(this)
   }
 
   _mountContent() {
@@ -63,17 +64,17 @@ class HawkEyeMap extends Widget {
 
   _bindEvent() {
     this._map.resize()
-    this._viewer.map.on('move', this._onMove.bind(this))
+    this._viewer.map.on('move', this._moveListener)
   }
 
   _unbindEvent() {
-    this._viewer.map.off('move', this._onMove.bind(this))
+    this._viewer.map.off('move', this._moveListener)
   }
 
   /**
    *
    * @param baseLayer
-   * @returns {HawkeyeMap}
+   * @returns {HawkEyeMap}
    */
   addBaseLayer(baseLayer) {
     if (!this._map || !this._enabled || !this._promise) {

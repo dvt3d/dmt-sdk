@@ -9,7 +9,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>zoom controller</title>
   <script src="../libs/dm.min.js"></script>
-  <link href="../libs/dm.min.css" rel="stylesheet" />
+  <script src="../dat.gui.min.js"></script>
+  <link href="../libs/dm.min.css" type='text/css' rel="stylesheet" />
+  <link href='../index.css' type='text/css' rel='stylesheet'>
 
   <style>
       * {
@@ -43,7 +45,20 @@
     viewer.addBaseLayer(baseLayer)
     viewer.compass.enabled = true
     viewer.zoomController.enabled = true
+    addGuiController()
   }
+
+  function addGuiController(){
+    let controls = {
+      enable :true,
+    }
+    let gui = new dat.GUI();
+    gui.add(controls,'enable',).onChange(value=>{
+      viewer.compass.enabled = value
+      viewer.zoomController.enabled = value
+    })
+  }
+
   DM.ready().then(initViewer)
 </script>
 </body>

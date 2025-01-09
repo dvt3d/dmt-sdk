@@ -74,7 +74,7 @@ class Viewer {
     }
     this._canvas.className = 'viewer-canvas'
 
-    new MouseEvent(this)
+    // new MouseEvent(this)
 
     this._widgetContainer = DomUtil.create(
       'div',

@@ -34,6 +34,10 @@ const EXAMPLE_LIST = [
         page: 'hawk_eye_map.html',
       },
       {
+        name: '加载蒙层',
+        page: 'loading_mask.html',
+      },
+      {
         name: '右击菜单',
         page: 'contextmenu.html',
       },

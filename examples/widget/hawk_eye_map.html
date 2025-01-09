@@ -7,9 +7,11 @@
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
   />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>hawkeye map</title>
+  <title>hawk eye map</title>
   <script src="../libs/dm.min.js"></script>
-  <link href="../libs/dm.min.css" rel="stylesheet" />
+  <script src="../dat.gui.min.js"></script>
+  <link href="../libs/dm.min.css" type='text/css' rel="stylesheet" />
+  <link href='../index.css' type='text/css' rel='stylesheet'>
 
   <style>
       * {
@@ -44,7 +46,19 @@
     viewer.hawkEyeMap.enabled = true
     let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP)
     viewer.hawkEyeMap.addBaseLayer(baseLayer_elec)
+    addGuiController()
   }
+
+  function addGuiController(){
+    let controls = {
+      enable :true,
+    }
+    let gui = new dat.GUI();
+    gui.add(controls,'enable',).onChange(value=>{
+      viewer.hawkEyeMap.enabled = value
+    })
+  }
+
   DM.ready().then(initViewer)
 </script>
 </body>

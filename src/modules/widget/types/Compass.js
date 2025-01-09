@@ -17,6 +17,8 @@ class Compass extends Widget {
     super()
     this._wrapper = DomUtil.create('div', 'widget compass')
     this._inner = undefined
+    this._pitchListener = this._onPitch.bind(this)
+    this._rotateListener = this._onRotate.bind(this)
   }
 
   _mountContent() {
@@ -127,25 +129,27 @@ class Compass extends Widget {
   }
 
   _onRotate() {
-    let pitch = this._viewer.map.getPitch()
-    let bearing = this._viewer.map.getBearing()
+    const pitch = this._viewer.map.getPitch()
+    const bearing = this._viewer.map.getBearing()
     this._inner.style.cssText = `transform: rotateX(${-pitch}deg) rotateZ(${-bearing}deg);`
   }
 
   _onPitch() {
-    let pitch = this._viewer.map.getPitch()
-    let bearing = this._viewer.map.getBearing()
+    const pitch = this._viewer.map.getPitch()
+    const bearing = this._viewer.map.getBearing()
     this._inner.style.cssText = `transform: rotateX(${-pitch}deg) rotateZ(${-bearing}deg);`
   }
 
   _bindEvent() {
-    this._viewer.map.on('rotate', this._onRotate.bind(this))
-    this._viewer.map.on('pitch', this._onPitch.bind(this))
+    this._viewer.map.on('pitch', this._pitchListener)
+    this._viewer.map.on('rotate', this._rotateListener)
+    this._onPitch()
+    this._onRotate()
   }
 
   _unbindEvent() {
-    this._viewer.map.off('rotate', this._onRotate.bind(this))
-    this._viewer.map.off('pitch', this._onPitch.bind(this))
+    this._viewer.map.off('pitch', this._pitchListener)
+    this._viewer.map.off('rotate', this._rotateListener)
   }
 }
 

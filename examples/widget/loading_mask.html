@@ -7,7 +7,7 @@
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
   />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>compass</title>
+  <title>loading mask</title>
   <script src="../libs/dm.min.js"></script>
   <script src="../dat.gui.min.js"></script>
   <link href="../libs/dm.min.css" type='text/css' rel="stylesheet" />
@@ -44,7 +44,7 @@
       url: 'https://demotiles.maplibre.org/style.json',
     })
     viewer.addBaseLayer(baseLayer)
-    viewer.compass.enabled = true
+    viewer.loadingMask.enabled = true
     addGuiController()
   }
 
@@ -54,7 +54,7 @@
     }
     let gui = new dat.GUI();
     gui.add(controls,'enable',).onChange(value=>{
-      viewer.compass.enabled = value
+      viewer.loadingMask.enabled = value
     })
   }
 

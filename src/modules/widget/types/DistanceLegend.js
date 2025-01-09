@@ -9,10 +9,10 @@ class DistanceLegend extends Widget {
   constructor() {
     super()
     this._wrapper = DomUtil.create('div', 'widget distance-legend')
+    this._zoomListener = this._onZoom.bind(this)
   }
 
   _mountContent() {
-    this._onZoom()
     this._ready = true
   }
 
@@ -71,11 +71,12 @@ class DistanceLegend extends Widget {
   }
 
   _bindEvent() {
-    this._viewer.map.on('zoom', this._onZoom.bind(this))
+    this._viewer.map.on('zoom', this._zoomListener)
+    this._onZoom()
   }
 
   _unbindEvent() {
-    this._viewer.map.off('zoom', this._onZoom.bind(this))
+    this._viewer.map.off('zoom', this._zoomListener)
   }
 }
 

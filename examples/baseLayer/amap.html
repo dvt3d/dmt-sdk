@@ -7,9 +7,9 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>amap</title>
     <script src="../libs/dm.min.js"></script>
-
+    <link href="../libs/dm.min.css" type='text/css' rel="stylesheet"  />
     <style>
       * {
         margin: 0;
@@ -33,18 +33,28 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = new DM.Viewer('viewer-container')
-      let baseLayer_elec = DM.BaseLayerFactory.createAMapBaseLayer()
-      let baseLayer_img = DM.BaseLayerFactory.createAMapBaseLayer({
-        style:'img'
-      })
-      let baseLayer_cva = DM.BaseLayerFactory.createAMapBaseLayer({
-        style:'cva'
-      })
-
-      viewer.addBaseLayer([baseLayer_img,baseLayer_cva])
-      // console.log(viewer)
-      window.viewer = viewer
+      let viewer = undefined
+      function initViewer(){
+        viewer = new DM.Viewer('viewer-container')
+        let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP)
+        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP ,{
+          style:'img'
+        })
+        let baseLayer_cva = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP ,{
+          style:'cva'
+        })
+        viewer.addBaseLayer(baseLayer_elec,{
+          iconUrl:'../assets/icon/elec.png',
+          name:'电子'
+        }).addBaseLayer(baseLayer_img,{
+          iconUrl:'../assets/icon/img.png',
+          name:'影像'
+        }).addBaseLayer([baseLayer_img,baseLayer_cva],{
+          iconUrl:'../assets/icon/img.png',
+          name:'影像+注记'
+        })
+      }
+      DM.ready().then(initViewer)
     </script>
     </script>
   </body>

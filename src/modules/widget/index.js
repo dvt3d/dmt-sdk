@@ -6,6 +6,7 @@ import ZoomController from './types/ZoomController'
 import DistanceLegend from './types/DistanceLegend'
 import HawkEyeMap from './types/HawkEyeMap'
 import LoadingMask from './types/LoadingMask'
+import BaseLayerPicker from './types/BaseLayerPicker'
 
 export function createWidgets() {
   return {
@@ -14,5 +15,6 @@ export function createWidgets() {
     distanceLegend: new DistanceLegend(),
     hawkEyeMap: new HawkEyeMap(),
     loadingMask: new LoadingMask(),
+    baseLayerPicker: new BaseLayerPicker(),
   }
 }

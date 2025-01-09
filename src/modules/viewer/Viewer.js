@@ -167,6 +167,10 @@ class Viewer {
       }
       baseLayerCollection.fire('add', this._map)
       this._baseLayerCache[baseLayerCollection.getId()] = baseLayerCollection
+      this['baseLayerPicker'].addBaseLayer({
+        iconUrl: options.iconUrl,
+        name: options.name,
+      })
       //If no base layer is selected in the viewer, the first one will be selected by default.
       let hasSelected = false
       for (let key in this._baseLayerCache) {

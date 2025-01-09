@@ -1,14 +1,24 @@
+/**
+ * @Author: Caven Chen
+ */
+
 import { Event } from '../../event'
 import BaseLayerType from '../BaseLayerType'
+import { Util } from '../../utils'
 
 class StyleProvider extends Event {
   constructor(options = {}) {
     super()
+    this._id = Util.uuid()
     this._url = options.url
     this._data = options.data
     this._selected = false
     this._map = undefined
     this.on('add', this._onAdd.bind(this))
+  }
+
+  get id() {
+    return this._id
   }
 
   get type() {

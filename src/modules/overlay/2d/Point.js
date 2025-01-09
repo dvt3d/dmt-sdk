@@ -1,4 +1,9 @@
-import Overlay from '../Overlay.js'
+/**
+ * @Author: Caven Chen
+ */
+
+import Overlay from '../Overlay'
+import Parse from '../../parse/Parse'
 
 const DEF_STYLE = {
   size: 5,
@@ -11,14 +16,35 @@ const DEF_STYLE = {
 }
 
 class Point extends Overlay {
-  constructor(position) {
+  constructor(lngLat) {
     super()
-    this._position = position
+    this._lngLat = Parse.parseLngLatAlt(lngLat)
     this._style = DEF_STYLE
   }
 
   get type() {
     return Overlay.getType('point')
+  }
+
+  set show(show) {
+    if (this._show == show) {
+      return
+    }
+    this._show = show
+    this._layer?.fire('overlayChanged', this)
+  }
+
+  get show() {
+    return this._show
+  }
+
+  set lngLat(lngLat) {
+    this._lngLat = Parse.parseLngLatAlt(lngLat)
+    this._layer?.fire('overlayChanged', this)
+  }
+
+  get lngLat() {
+    return this._lngLat
   }
 
   /**
@@ -31,6 +57,7 @@ class Point extends Overlay {
       ...this._style,
       ...style,
     }
+    this._layer?.fire('overlayChanged', this)
     return this
   }
 
@@ -40,7 +67,11 @@ class Point extends Overlay {
    */
   toFeature() {
     return {
-      type: 'Point',
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [this._lngLat.lng, this._lngLat.lat],
+      },
       properties: {
         overlayId: this._overlayId,
         id: this._bid,

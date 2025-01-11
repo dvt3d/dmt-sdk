@@ -6,27 +6,28 @@ import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 
 const DEF_STYLE = {
-  size: 5,
-  color: '#ffffff',
-  blur: '0',
+  size: 1,
+  offset: [0, 0],
+  anchor: 'center',
   opacity: 1,
-  strokeWidth: 2,
-  strokeColor: '#0000ff',
-  strokeOpacity: 1,
 }
 
-class Point extends Overlay {
-  constructor(lngLat) {
+class Billboard extends Overlay {
+  constructor(lngLat, icon) {
     if (!lngLat) {
       throw 'lngLat is required'
     }
+    if (!icon) {
+      throw 'icon is required'
+    }
     super()
     this._lngLat = Parse.parseLngLatAlt(lngLat)
+    this._icon = icon
     this._style = DEF_STYLE
   }
 
   get type() {
-    return Overlay.getType('point')
+    return Overlay.getType('billboard')
   }
 
   set show(show) {
@@ -50,10 +51,22 @@ class Point extends Overlay {
     return this._lngLat
   }
 
+  set icon(icon) {
+    if (this._icon == icon) {
+      return
+    }
+    this._icon = icon
+    this._layer?.fire('overlayChanged', this)
+  }
+
+  get icon() {
+    return this._icon
+  }
+
   /**
    *
    * @param style
-   * @returns {Point}
+   * @returns {Billboard}
    */
   setStyle(style) {
     this._style = {
@@ -79,12 +92,13 @@ class Point extends Overlay {
         overlayId: this._overlayId,
         id: this._bid,
         show: this._show,
+        icon: this._icon,
         ...this._style,
       },
     }
   }
 }
 
-Overlay.registerType('point')
+Overlay.registerType('billboard')
 
-export default Point
+export default Billboard

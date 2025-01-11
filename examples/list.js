@@ -127,14 +127,56 @@ const EXAMPLE_LIST = [
         page: 'cluster_clustering.html',
       },
       {
+        name: 'GeoJson图层',
+        page: 'geojson.html',
+      },
+      {
         name: '3d-tiles图层',
         page: 'tileset.html',
+      },
+      {
+        name: 'I3S图层',
+        page: 'i3s.html',
+      },
+      {
+        name: 'DOM图层',
+        page: 'dom.html',
       },
     ],
   },
   {
     name: '矢量要素',
     folder: 'vector',
+    children: [
+      {
+        name:'点',
+        page: 'point.html',
+      },
+      {
+        name:'图标',
+        page: 'billboard.html',
+      },
+      {
+        name:'文本',
+        page: 'label.html',
+      },
+      {
+        name:'线',
+        page: 'polyline.html',
+      },
+      {
+        name:'面',
+        page: 'polygon.html',
+      },
+      {
+        name:'拉伸体',
+        page: 'extrusion.html',
+      },
+    ],
+  },
+  {
+    name: '网格要素',
+    folder: 'mesh',
     children: [],
   },
   {

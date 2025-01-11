@@ -14,6 +14,11 @@ class VectorLayer extends Layer {
       type: 'FeatureCollection',
       features: [],
     }
+    this._ready = new Promise((resolve) => {
+      this.once('added', () => {
+        resolve()
+      })
+    })
     this.on('overlayChanged', this._onOverlayChanged.bind(this))
   }
 
@@ -31,12 +36,12 @@ class VectorLayer extends Layer {
     return Layer.getType('vector')
   }
 
-  _onOverlayChanged(overlay) {
-    if (this._viewer) {
-      let index = this._dataJson.features.findIndex(
-        (item) => item.properties.overlayId === overlay.overlayId
-      )
-    }
+  _onOverlayChanged({ overlay, property }) {
+    // if (this._viewer) {
+    //   let index = this._dataJson.features.findIndex(
+    //     (item) => item.properties.overlayId === overlay.overlayId
+    //   )
+    // }
   }
 
   /**
@@ -52,7 +57,7 @@ class VectorLayer extends Layer {
         return 'line'
       case VectorType.POLYGON:
         return 'fill'
-      case VectorType.SYMBOL:
+      case VectorType.BILLBOARD:
       case VectorType.LABEL:
         return 'symbol'
       case VectorType.EXTRUSION:
@@ -78,10 +83,36 @@ class VectorLayer extends Layer {
           'circle-stroke-color': ['get', 'strokeColor'],
           'circle-stroke-opacity': ['get', 'strokeOpacity'],
         }
+      case VectorType.BILLBOARD: {
+        return {
+          'icon-opacity': ['get', 'opacity'],
+        }
+      }
       case VectorType.POLYLINE:
-        return 'line'
+        return {}
       case VectorType.POLYGON:
-        return 'fill'
+        return {}
+      default:
+        return {}
+    }
+  }
+
+  /**
+   *
+   * @returns {string}
+   * @private
+   */
+  _getLayerLayout() {
+    switch (this._vectorType) {
+      case VectorType.BILLBOARD:
+        return {
+          'icon-image': ['get', 'icon'],
+          'icon-size': ['get', 'size'],
+          'icon-offset': ['get', 'offset'],
+          'icon-anchor': ['get', 'anchor'],
+        }
+      default:
+        return {}
     }
   }
 
@@ -102,9 +133,11 @@ class VectorLayer extends Layer {
       type: this._getLayerType(),
       source: this._sourceId,
       paint: this._getLayerPaint(),
+      layout: this._getLayerLayout(),
     })
     this._source = this._viewer.map.getSource(this._sourceId)
     this._delegate = this._viewer.map.getLayer(this._id)
+    this.fire('added')
   }
 
   /**
@@ -127,18 +160,50 @@ class VectorLayer extends Layer {
   /**
    *
    * @param overlay
+   * @private
+   */
+  _addOverlay(overlay) {
+    try {
+      if (this._cache[overlay.overlayId]) {
+        throw `overlay ${overlay.overlayId} already exists`
+      }
+      this._dataJson.features.push(overlay.toFeature())
+      this._cache[overlay.overlayId] = overlay
+      overlay.fire('add', this)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  /**
+   *
+   * @param overlay
    * @returns {VectorLayer}
    */
   addOverlay(overlay) {
-    if (this._cache[overlay.overlayId]) {
-      throw `overlay ${overlay.overlayId} already exists`
+    if (!overlay) {
+      return this
     }
-    this._dataJson.features.push(overlay.toFeature())
-    this._cache[overlay.overlayId] = overlay
-    overlay.fire('add', this)
-    if (this._source) {
-      this._source.setData(this._dataJson)
+
+    if (overlay.type.toLocaleLowerCase() !== this._vectorType) {
+      throw 'the overlay type must be match the layer vector type'
     }
+    this._addOverlay(overlay)
+    this._ready.then(() => {
+      if (this._vectorType === VectorType.BILLBOARD) {
+        if (!this._viewer.map.hasImage(overlay.icon)) {
+          this._viewer.map.loadImage(overlay.icon).then((image) => {
+            this._viewer.map.addImage(overlay.icon, image.data)
+            this._source && this._source.setData(this._dataJson)
+          })
+        } else {
+          this._source && this._source.setData(this._dataJson)
+        }
+      } else {
+        this._source && this._source.setData(this._dataJson)
+      }
+    })
+
     return this
   }
 
@@ -148,21 +213,46 @@ class VectorLayer extends Layer {
    * @returns {VectorLayer}
    */
   addOverlays(overlays) {
-    for (let overlay of overlays) {
-      try {
-        if (this._cache[overlay.overlayId]) {
-          throw `overlay ${overlay.overlayId} already exists`
-        }
-        this._dataJson.features.push(overlay.toFeature())
-        this._cache[overlay.overlayId] = overlay
-        overlay.fire('add', this)
-      } catch (e) {
-        console.error(e)
+    if (!Array.isArray(overlays)) {
+      return this
+    }
+
+    const filters = overlays.filter(
+      (overlay) => overlay.type.toLocaleLowerCase() !== this._vectorType
+    )
+    if (filters && filters.length > 0) {
+      throw 'the overlays type must be match the layer vector type'
+    }
+
+    const iconSet = new Set()
+    overlays.forEach((overlay) => {
+      this._addOverlay(overlay)
+      if (this._vectorType === VectorType.BILLBOARD) {
+        iconSet.add(overlay.icon)
       }
-    }
-    if (this._source) {
-      this._source.setData(this._dataJson)
-    }
+    })
+    const icons = [...iconSet]
+    this._ready.then(() => {
+      if (this._vectorType === VectorType.BILLBOARD) {
+        const promises = icons.map((icon) => {
+          if (!this._viewer.map.hasImage(icon)) {
+            return this._viewer.map.loadImage(icon)
+          }
+          return null
+        })
+        Promise.allSettled(promises).then((results) => {
+          results.forEach((result, index) => {
+            if (result.value) {
+              this._viewer.map.addImage(icons[index], result.value.data)
+            }
+          })
+          this._source && this._source.setData(this._dataJson)
+        })
+      } else {
+        this._source && this._source.setData(this._dataJson)
+      }
+    })
+
     return this
   }
 

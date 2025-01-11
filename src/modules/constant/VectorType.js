@@ -1,8 +1,8 @@
 const POINT = 'point'
 const POLYLINE = 'polyline'
 const POLYGON = 'polygon'
-const SYMBOL = 'symbol'
+const BILLBOARD = 'billboard'
 const EXTRUSION = 'extrusion'
 const LABEL = 'label'
 
-export { POINT, POLYLINE, POLYGON, SYMBOL, EXTRUSION, LABEL }
+export { POINT, POLYLINE, POLYGON, BILLBOARD, EXTRUSION, LABEL }

@@ -10,6 +10,7 @@ class Overlay extends Event {
     this._attr = {}
     this._show = true
     this._style = {}
+    this._layer = undefined
     this.on('add', this._onAdd.bind(this))
     this.on('remove', this._onRemove.bind(this))
   }
@@ -31,7 +32,9 @@ class Overlay extends Event {
    * @param layer
    * @private
    */
-  _onAdd(layer) {}
+  _onAdd(layer) {
+    this._layer = layer
+  }
 
   /**
    *

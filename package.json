@@ -42,8 +42,8 @@
     "shelljs": "^0.8.5"
   },
   "dependencies": {
-    "@dvgis/maplibre-three-plugin": "^1.0.1",
-    "maplibre-gl": "^4.7.1",
-    "three": "^0.171.0"
+    "@dvgis/maplibre-three-plugin": "^2.0.0",
+    "maplibre-gl": "^5.0.0",
+    "three": "^0.172.0"
   }
 }

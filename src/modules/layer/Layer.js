@@ -9,6 +9,7 @@ class Layer extends Event {
     this._attr = {}
     this._cache = {}
     this._delegate = undefined
+    this._viewer = undefined
     this.on('add', this._onAdd.bind(this))
     this.on('remove', this._onRemove.bind(this))
   }
@@ -60,6 +61,16 @@ class Layer extends Event {
       result.push(this._cache[key])
     }
     return result
+  }
+
+  /**
+   *
+   * @param viewer
+   * @returns {Layer}
+   */
+  addTo(viewer) {
+    viewer.addLayer(this)
+    return this
   }
 
   /**

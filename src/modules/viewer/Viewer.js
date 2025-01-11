@@ -53,7 +53,6 @@ class Viewer {
       )
       containerEl.firstElementChild.className = 'canvas-container'
       containerEl.removeChild(containerEl.lastElementChild)
-
       this._ready = new Promise((resolve) => {
         this._map.once('style.load', (e) => {
           resolve()
@@ -119,12 +118,41 @@ class Viewer {
     return this._clock
   }
 
+  _reAddLayers() {
+    this.getLayers()
+      .filter((layer) =>
+        [LayerType.VECTOR, LayerType.CLUSTER, LayerType.GEOJSON].includes(
+          layer.type
+        )
+      )
+      .forEach((layer) => {
+        layer.fire('add', this)
+      })
+  }
+
   /**
    *
    * @param terrain
    * @returns {Viewer}
    */
   setTerrain(terrain) {
+    return this
+  }
+
+  /**
+   *
+   * @param type
+   * @returns {Viewer}
+   */
+  setProjection(type) {
+    if (this._sceneMode !== SceneMode.MAP_SCENE) {
+      throw 'this scene mode not support the function'
+    }
+    this._ready.then(() => {
+      this._map.setProjection({
+        type,
+      })
+    })
     return this
   }
 
@@ -177,6 +205,11 @@ class Viewer {
         hasSelected = hasSelected || this._baseLayerCache[key].selected
       }
       if (!hasSelected) {
+        if (baseLayerCollection.getType() === BaseLayerType.STYLE) {
+          this._map.once('style.load', this._reAddLayers.bind(this))
+        } else {
+          this._reAddLayers()
+        }
         baseLayerCollection.selected = true
       }
     })
@@ -231,24 +264,22 @@ class Viewer {
       if (currentId === nextId) {
         return this
       }
-
       this._baseLayerCache[currentId].selected = false
-
       //change vector base layer, needs reAdd the 2d layers
       if (this._baseLayerCache[currentId].getType() === BaseLayerType.STYLE) {
-        const reloadLayers = () => {
-          let layers = this.getLayers().filter((layer) =>
-            [LayerType.VECTOR, LayerType.CLUSTER].includes(layer.type)
-          )
-          for (let i = 0; i < layers.length; i++) {
-            let layer = layers[i]
-            delete this._layerCache[layer.id]
-            this.addLayer(layer)
-          }
-          this._baseLayerCache[nextId].selected = true
+        const _this = this
+        if (this._baseLayerCache[nextId].getType() === BaseLayerType.STYLE) {
+          this._map.once('style.load', () => {
+            _this._reAddLayers() // reAdd all layers
+          })
+          _this._baseLayerCache[nextId].selected = true
+        } else {
+          this._map.once('style.load', () => {
+            _this._reAddLayers() // reAdd all layers
+            _this._baseLayerCache[nextId].selected = true
+          })
+          this._map.setStyle(DEF_STYLE, { diff: false }) //remove all layer
         }
-        this._map.once('style.load', reloadLayers.bind(this))
-        this._map.setStyle(DEF_STYLE, { diff: false }) //remove all layer
       } else {
         this._baseLayerCache[nextId].selected = true
       }
@@ -265,14 +296,15 @@ class Viewer {
     if (!layer) {
       return this
     }
-
     if (this._layerCache[layer.id]) {
       throw `the layer ${layer.id} already exists`
     }
-    this._ready.then(() => {
+    if (this._sceneMode === SceneMode.MAP_SCENE) {
+      this._layerCache[layer.id] = layer
+    } else {
       layer.fire('add', this)
       this._layerCache[layer.id] = layer
-    })
+    }
     return this
   }
 
@@ -288,9 +320,7 @@ class Viewer {
     if (!this._layerCache[layer.id]) {
       throw `the layer ${layer.id} not exists`
     }
-    this._ready.then(() => {
-      layer.fire('remove')
-    })
+    layer.fire('remove')
     return this
   }
 
@@ -322,9 +352,9 @@ class Viewer {
    * @returns {Viewer}
    */
   flyToPosition(position) {
-    // if (this._sceneMode === SceneMode.MAP_SCENE) {
-    // } else {
-    // }
+    if (this._sceneMode === SceneMode.MAP_SCENE) {
+      // this._map.easeTo({})
+    }
     return this
   }
 

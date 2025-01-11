@@ -36,7 +36,12 @@ class Event {
    * @private
    */
   _once(type, callback) {
-    //  this._delegate.once(type, callback)
+    const _this = this
+    const oneTimeListener = (e) => {
+      callback && callback(e)
+      _this._dispatcher.removeEventListener(type, oneTimeListener)
+    }
+    this._dispatcher.addEventListener(type, oneTimeListener)
   }
 
   /**

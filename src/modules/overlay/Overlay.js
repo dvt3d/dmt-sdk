@@ -1,16 +1,18 @@
 import { Event } from '../event'
 import { Util } from '../utils'
 import OverlayType from './OverlayType'
+import State from '../state/State'
 
 class Overlay extends Event {
   constructor() {
     super()
     this._overlayId = Util.uuid()
-    this._bid = undefined
+    this._bid = Util.uuid()
     this._attr = {}
     this._show = true
     this._style = {}
     this._layer = undefined
+    this._state = undefined
     this.on('add', this._onAdd.bind(this))
     this.on('remove', this._onRemove.bind(this))
   }
@@ -27,6 +29,18 @@ class Overlay extends Event {
     return this._bid
   }
 
+  set attr(attr) {
+    this._attr = attr
+  }
+
+  get attr() {
+    return this._attr
+  }
+
+  get state() {
+    return this._state
+  }
+
   /**
    *
    * @param layer
@@ -34,13 +48,16 @@ class Overlay extends Event {
    */
   _onAdd(layer) {
     this._layer = layer
+    this._state = State.ADDED
   }
 
   /**
    *
    * @private
    */
-  _onRemove() {}
+  _onRemove() {
+    this._state = State.REMOVED
+  }
 
   /**
    *

@@ -4,6 +4,7 @@
 
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
+import State from '../../state/State'
 
 const DEF_STYLE = {
   font: ['Open Sans Regular', 'Arial Unicode MS Regular'],
@@ -29,6 +30,7 @@ class Label extends Overlay {
     this._lngLat = Parse.parseLngLatAlt(lngLat)
     this._text = text
     this._style = DEF_STYLE
+    this._state = State.INITIALIZED
   }
 
   get type() {

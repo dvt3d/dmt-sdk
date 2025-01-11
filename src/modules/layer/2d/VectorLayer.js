@@ -1,6 +1,7 @@
 import Layer from '../Layer'
 import { Util } from '../../utils'
 import { VectorType } from '../../constant'
+import State from '../../state/State'
 
 class VectorLayer extends Layer {
   constructor(id, vectorType) {
@@ -36,12 +37,19 @@ class VectorLayer extends Layer {
     return Layer.getType('vector')
   }
 
-  _onOverlayChanged({ overlay, property }) {
-    // if (this._viewer) {
-    //   let index = this._dataJson.features.findIndex(
-    //     (item) => item.properties.overlayId === overlay.overlayId
-    //   )
-    // }
+  /**
+   *
+   * @param overlay
+   * @param property
+   * @private
+   */
+  _onOverlayChanged(overlay) {
+    if (overlay.state === State.ADDED) {
+      let index = this._dataJson.features.findIndex(
+        (item) => item.properties.overlayId === overlay.overlayId
+      )
+      this._dataJson.features[index] = overlay.toFeature()
+    }
   }
 
   /**

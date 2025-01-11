@@ -4,6 +4,7 @@
 
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
+import State from '../../state/State'
 
 const DEF_STYLE = {
   size: 1,
@@ -24,6 +25,7 @@ class Billboard extends Overlay {
     this._lngLat = Parse.parseLngLatAlt(lngLat)
     this._icon = icon
     this._style = DEF_STYLE
+    this._state = State.INITIALIZED
   }
 
   get type() {

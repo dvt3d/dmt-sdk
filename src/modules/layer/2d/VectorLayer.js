@@ -111,6 +111,23 @@ class VectorLayer extends Layer {
           'icon-offset': ['get', 'offset'],
           'icon-anchor': ['get', 'anchor'],
         }
+      case VectorType.LABEL:
+        return {
+          'text-field': [
+            'format',
+            ['get', 'text'],
+            {
+              'text-font': ['get', 'font'],
+              'text-color': ['get', 'color'],
+              'text-opacity': ['get', 'opacity'],
+              'text-allow-overlap': ['get', 'allowOverlap'],
+            },
+          ],
+          'text-size': ['get', 'size'],
+          'text-justify': ['get', 'justify'],
+          'text-anchor': ['get', 'anchor'],
+          'text-offset': ['get', 'offset'],
+        }
       default:
         return {}
     }

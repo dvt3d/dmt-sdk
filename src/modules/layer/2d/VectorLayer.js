@@ -49,6 +49,7 @@ class VectorLayer extends Layer {
         (item) => item.properties.overlayId === overlay.overlayId
       )
       this._dataJson.features[index] = overlay.toFeature()
+      this._source && this._source.setData(this._dataJson)
     }
   }
 

@@ -71,6 +71,7 @@ class Viewer {
       canvasContainer.appendChild(this._canvas)
       this._scene = new THREEScene(this)
     }
+
     this._canvas.className = 'viewer-canvas'
 
     // new MouseEvent(this)

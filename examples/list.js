@@ -165,6 +165,10 @@ const EXAMPLE_LIST = [
         page: 'polyline.html',
       },
       {
+        name:'虚线',
+        page: 'dash_line.html',
+      },
+      {
         name:'面',
         page: 'polygon.html',
       },

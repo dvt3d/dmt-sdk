@@ -7,13 +7,11 @@ import Parse from '../../parse/Parse'
 import State from '../../state/State'
 
 const DEF_STYLE = {
-  size: 5,
+  width: 5,
   color: '#ffffff',
-  blur: '0',
+  gapWidth: 0,
   opacity: 1,
-  strokeWidth: 2,
-  strokeColor: '#0000ff',
-  strokeOpacity: 1,
+  blur: 0,
 }
 
 class Polyline extends Overlay {
@@ -74,8 +72,8 @@ class Polyline extends Overlay {
     return {
       type: 'Feature',
       geometry: {
-        type: 'Polyline',
-        coordinates: [this._lngLat.lng, this._lngLat.lat],
+        type: 'LineString',
+        coordinates: this._lngLats.map((lngLat) => [lngLat.lng, lngLat.lat]),
       },
       properties: {
         overlayId: this._overlayId,

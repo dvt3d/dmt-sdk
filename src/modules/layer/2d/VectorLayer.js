@@ -49,7 +49,9 @@ class VectorLayer extends Layer {
         (item) => item.properties.overlayId === overlay.overlayId
       )
       this._dataJson.features[index] = overlay.toFeature()
-      this._source && this._source.setData(this._dataJson)
+      Util.debounce(() => {
+        this._source && this._source.setData(this._dataJson)
+      }, 1000)
     }
   }
 
@@ -98,9 +100,21 @@ class VectorLayer extends Layer {
         }
       }
       case VectorType.POLYLINE:
-        return {}
+        return {
+          'line-color': ['get', 'color'],
+          'line-opacity': ['get', 'opacity'],
+          'line-width': ['get', 'width'],
+          'line-gap-width': ['get', 'gapWidth'],
+          'line-blur': ['get', 'blur'],
+        }
       case VectorType.POLYGON:
-        return {}
+        return {
+          'fill-color': ['get', 'color'],
+          'fill-opacity': ['get', 'opacity'],
+          'line-width': ['get', 'width'],
+          'line-gap-width': ['get', 'gapWidth'],
+          'line-blur': ['get', 'blur'],
+        }
       default:
         return {}
     }

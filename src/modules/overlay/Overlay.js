@@ -11,6 +11,7 @@ class Overlay extends Event {
     this._attr = {}
     this._show = true
     this._style = {}
+    this._delegate = undefined
     this._layer = undefined
     this._state = undefined
     this.on('add', this._onAdd.bind(this))
@@ -37,9 +38,34 @@ class Overlay extends Event {
     return this._attr
   }
 
+  get delegate() {
+    return this._delegate
+  }
+
   get state() {
     return this._state
   }
+
+  /**
+   * The hook for mount overlay
+   * Subclasses need to be overridden
+   * @private
+   */
+  _mountedHook() {}
+
+  /**
+   * The hook for added
+   * Subclasses need to be overridden
+   * @private
+   */
+  _addedHook() {}
+
+  /**
+   * The hook for removed
+   * Subclasses need to be overridden
+   * @private
+   */
+  _removedHook() {}
 
   /**
    *
@@ -48,6 +74,9 @@ class Overlay extends Event {
    */
   _onAdd(layer) {
     this._layer = layer
+    this._mountedHook && this._mountedHook()
+    this._delegate && this._layer.delegate.add(this._delegate)
+    this._addedHook && this._addedHook()
     this._state = State.ADDED
   }
 
@@ -56,6 +85,7 @@ class Overlay extends Event {
    * @private
    */
   _onRemove() {
+    this._removedHook && this._removedHook()
     this._state = State.REMOVED
   }
 

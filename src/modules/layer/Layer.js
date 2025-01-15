@@ -4,6 +4,7 @@
 import { Event } from '../event'
 import LayerType from './LayerType'
 import { Util } from '../utils'
+import State from '../state/State.js'
 
 class Layer extends Event {
   constructor(id) {
@@ -45,17 +46,46 @@ class Layer extends Event {
   }
 
   /**
+   * The hook for mount layer
+   * Subclasses need to be overridden
+   * @private
+   */
+  _mountedHook() {}
+
+  /**
+   * The hook for added
+   * Subclasses need to be overridden
+   * @private
+   */
+  _addedHook() {}
+
+  /**
+   * The hook for removed
+   * Subclasses need to be overridden
+   * @private
+   */
+  _removedHook() {}
+
+  /**
    *
    * @param viewer
    * @private
    */
-  _onAdd(viewer) {}
+  _onAdd(viewer) {
+    this._viewer = viewer
+    this._mountedHook && this._mountedHook()
+    this._addedHook && this._addedHook()
+    this._state = State.ADDED
+  }
 
   /**
    *
    * @private
    */
-  _onRemove() {}
+  _onRemove() {
+    this._removedHook && this._removedHook()
+    this._state = State.REMOVED
+  }
 
   /**
    *

@@ -21,6 +21,7 @@ class VectorLayer extends Layer {
       })
     })
     this.on('overlayChanged', this._onOverlayChanged.bind(this))
+    this._state = State.INITIALIZED
   }
 
   set show(show) {
@@ -161,8 +162,7 @@ class VectorLayer extends Layer {
    * @param viewer
    * @private
    */
-  _onAdd(viewer) {
-    this._viewer = viewer
+  _mountedHook() {
     this._viewer.map.addSource(this._sourceId, {
       type: 'geojson',
       data: this._dataJson,
@@ -184,7 +184,7 @@ class VectorLayer extends Layer {
    *
    * @private
    */
-  _onRemove() {
+  _removedHook() {
     if (this._viewer) {
       if (this._viewer.map.getLayer(this._id)) {
         this._viewer.map.removeLayer(this._id)
@@ -229,6 +229,7 @@ class VectorLayer extends Layer {
       throw 'the overlay type must be match the layer vector type'
     }
     this._addOverlay(overlay)
+
     this._ready.then(() => {
       if (this._vectorType === VectorType.BILLBOARD) {
         if (!this._viewer.map.hasImage(overlay.icon)) {
@@ -271,6 +272,7 @@ class VectorLayer extends Layer {
         iconSet.add(overlay.icon)
       }
     })
+
     const icons = [...iconSet]
     this._ready.then(() => {
       if (this._vectorType === VectorType.BILLBOARD) {

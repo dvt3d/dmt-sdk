@@ -11,8 +11,11 @@ class Box extends Overlay {
     this._geometry = undefined
   }
 
-  _onAdd(layer) {
-    this._layer = layer
+  /**
+   *
+   * @private
+   */
+  _mountedHook() {
     this._geometry = new THREE.BoxGeometry(
       this._dimensions.x,
       this._dimensions.y,
@@ -26,10 +29,9 @@ class Box extends Overlay {
     this._delegate.geometry = this._geometry
     this._delegate.material =
       this._style?.material?.getValue() || MaterialCache.BASIC.getValue()
-    layer.delegate.add(this._delegate)
   }
 
-  _onRemove() {}
+  _removedHook() {}
 }
 
 export default Box

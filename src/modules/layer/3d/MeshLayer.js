@@ -26,6 +26,47 @@ class MeshLayer extends Layer {
    *
    */
   _onRemove() {}
+
+  /**
+   *
+   * @param overlay
+   * @returns {MeshLayer}
+   */
+  addOverlay(overlay) {
+    if (!overlay) {
+      throw 'overlay is required'
+    }
+    if (this._cache[overlay.overlayId]) {
+      throw `overlay ${overlay.overlayId} already exists`
+    }
+    overlay.fire('add', this)
+    this._cache[overlay.overlayId] = overlay
+    return this
+  }
+
+  /**
+   *
+   * @param overlays
+   * @returns {MeshLayer}
+   */
+  addOverlays(overlays) {
+    if (!overlays) {
+      throw 'overlays is required'
+    }
+    if (!Array.isArray(overlays)) {
+      throw 'overlays must be an array'
+    }
+    overlays.forEach((overlay) => {
+      this.addOverlay(overlay)
+    })
+    return this
+  }
+
+  /**
+   *
+   * @param overlay
+   */
+  removeOverlay(overlay) {}
 }
 
 export default MeshLayer

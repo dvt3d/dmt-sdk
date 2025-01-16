@@ -12,13 +12,7 @@ class ModelLayer extends Layer {
     this._delegate.visible = show
   }
 
-  _onAdd(viewer) {
-    this._viewer = viewer
-    const world = viewer.scene.world
-    world.add(this._delegate)
-  }
-
-  _onRemove() {}
+  _(viewer) {}
 }
 
 export default ModelLayer

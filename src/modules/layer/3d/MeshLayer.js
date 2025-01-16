@@ -9,7 +9,12 @@ class MeshLayer extends Layer {
   }
 
   set show(show) {
+    this._show = show
     this._delegate.visible = show
+  }
+
+  get show() {
+    return this._show
   }
 
   /**

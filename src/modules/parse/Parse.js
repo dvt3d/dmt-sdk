@@ -1,40 +1,40 @@
 /**
  * @Author: Caven Chen
  */
-import LngLatAlt from '../lng-lat-alt/LngLatAlt'
+import Position from '../position/Position'
 
 class Parse {
   /**
    *
    * @param lngLat
-   * @returns {LngLatAlt}
+   * @returns {Position}
    */
-  static parseLngLatAlt(lngLatAlt) {
-    if (typeof lngLatAlt === 'string') {
-      return LngLatAlt.fromString(lngLatAlt)
-    } else if (Array.isArray(lngLatAlt)) {
-      return LngLatAlt.fromArray(lngLatAlt)
-    } else if (Object(lngLatAlt) instanceof LngLatAlt) {
-      return lngLatAlt
+  static parsePosition(position) {
+    if (typeof position === 'string') {
+      return Position.fromString(position)
+    } else if (Array.isArray(position)) {
+      return Position.fromArray(position)
+    } else if (Object(position) instanceof Position) {
+      return position
     } else {
-      return new LngLatAlt(lngLatAlt.lng, lngLatAlt.lat, lngLatAlt.alt)
+      return new Position(position.x, position.y, position.z)
     }
   }
 
   /**
    *
-   * @param lngLatAlts
-   * @returns {LngLatAlt[]}
+   * @param positions
+   * @returns {Position[]}
    */
-  static parseLngLatAlts(lngLatAlts) {
-    if (typeof lngLatAlts === 'string') {
-      if (lngLatAlts.indexOf('#') >= 0) {
+  static parsePositions(positions) {
+    if (typeof positions === 'string') {
+      if (positions.indexOf('#') >= 0) {
         throw new Error('the positions invalid')
       }
-      lngLatAlts = lngLatAlts.split(';').filter((item) => !!item)
+      positions = positions.split(';').filter((item) => !!item)
     }
-    return lngLatAlts.map((item) => {
-      return this.parseLngLatAlt(item)
+    return positions.map((item) => {
+      return this.parsePosition(item)
     })
   }
 }

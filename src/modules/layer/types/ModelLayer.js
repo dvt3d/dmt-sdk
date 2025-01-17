@@ -1,5 +1,9 @@
-import Layer from '../Layer'
+/**
+ * @Author: Caven Chen
+ */
+
 import { THREE } from '../../../name-space'
+import Layer from '../Layer'
 
 class ModelLayer extends Layer {
   constructor(id) {

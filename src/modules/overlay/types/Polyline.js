@@ -5,6 +5,7 @@
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 import State from '../../state/State'
+import { LayerType } from '../../layer/index.js'
 
 const DEF_STYLE = {
   width: 5,
@@ -15,12 +16,12 @@ const DEF_STYLE = {
 }
 
 class Polyline extends Overlay {
-  constructor(lngLats) {
-    if (!lngLats) {
+  constructor(positions) {
+    if (!positions) {
       throw 'lngLat is required'
     }
     super()
-    this._lngLats = Parse.parseLngLatAlts(lngLats)
+    this._positions = Parse.parsePositions(positions)
     this._style = DEF_STYLE
     this._state = State.INITIALIZED
   }
@@ -41,13 +42,40 @@ class Polyline extends Overlay {
     return this._show
   }
 
-  set lngLat(lngLat) {
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+  set positions(positions) {
+    this._positions = Parse.parsePositions(positions)
     this._layer?.fire('overlayChanged', this)
   }
 
-  get lngLat() {
-    return this._lngLat
+  get positions() {
+    return this._positions
+  }
+
+  /**
+   *
+   * @private
+   */
+  _mountedHook() {
+    if (this._layer.type === LayerType.VECTOR) {
+      const lngLats = this._positions.map((item) => {
+        const lngLat = item.toDegrees()
+        return [lngLat.lng, lngLat.lat]
+      })
+      this._delegate = {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: lngLats,
+        },
+        properties: {
+          overlayId: this._overlayId,
+          id: this._bid,
+          show: this._show,
+          icon: this._icon,
+          ...this._style,
+        },
+      }
+    }
   }
 
   /**
@@ -62,26 +90,6 @@ class Polyline extends Overlay {
     }
     this._layer?.fire('overlayChanged', this)
     return this
-  }
-
-  /**
-   *
-   * @returns {{}}
-   */
-  toFeature() {
-    return {
-      type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates: this._lngLats.map((lngLat) => [lngLat.lng, lngLat.lat]),
-      },
-      properties: {
-        overlayId: this._overlayId,
-        id: this._bid,
-        show: this._show,
-        ...this._style,
-      },
-    }
   }
 }
 

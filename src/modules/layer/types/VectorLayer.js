@@ -1,3 +1,6 @@
+/**
+ * @Author: Caven Chen
+ */
 import Layer from '../Layer'
 import { Util } from '../../utils'
 import { VectorType } from '../../constant'
@@ -34,6 +37,10 @@ class VectorLayer extends Layer {
     return this._show
   }
 
+  get dataJson() {
+    return this._dataJson
+  }
+
   get type() {
     return Layer.getType('vector')
   }
@@ -49,7 +56,7 @@ class VectorLayer extends Layer {
       let index = this._dataJson.features.findIndex(
         (item) => item.properties.overlayId === overlay.overlayId
       )
-      this._dataJson.features[index] = overlay.toFeature()
+      this._dataJson.features[index] = overlay.delegate
       Util.debounce(() => {
         this._source && this._source.setData(this._dataJson)
       }, 1000)
@@ -200,36 +207,20 @@ class VectorLayer extends Layer {
   /**
    *
    * @param overlay
-   * @private
-   */
-  _addOverlay(overlay) {
-    try {
-      if (this._cache[overlay.overlayId]) {
-        throw `overlay ${overlay.overlayId} already exists`
-      }
-      this._dataJson.features.push(overlay.toFeature())
-      this._cache[overlay.overlayId] = overlay
-      overlay.fire('add', this)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  /**
-   *
-   * @param overlay
    * @returns {VectorLayer}
    */
   addOverlay(overlay) {
     if (!overlay) {
       return this
     }
-
     if (overlay.type.toLocaleLowerCase() !== this._vectorType) {
       throw 'the overlay type must be match the layer vector type'
     }
-    this._addOverlay(overlay)
-
+    if (this._cache[overlay.overlayId]) {
+      throw `overlay ${overlay.overlayId} already exists`
+    }
+    overlay.fire('add', this)
+    this._cache[overlay.overlayId] = overlay
     this._ready.then(() => {
       if (this._vectorType === VectorType.BILLBOARD) {
         if (!this._viewer.map.hasImage(overlay.icon)) {
@@ -264,15 +255,22 @@ class VectorLayer extends Layer {
     if (filters && filters.length > 0) {
       throw 'the overlays type must be match the layer vector type'
     }
-
     const iconSet = new Set()
-    overlays.forEach((overlay) => {
-      this._addOverlay(overlay)
-      if (this._vectorType === VectorType.BILLBOARD) {
-        iconSet.add(overlay.icon)
+    for (const overlay of overlays) {
+      try {
+        if (this._cache[overlay.overlayId]) {
+          throw `overlay ${overlay.overlayId} already exists`
+        }
+        overlay.fire('add', this)
+        this._cache[overlay.overlayId] = overlay
+      } catch (e) {
+        console.error(e)
+      } finally {
+        if (this._vectorType === VectorType.BILLBOARD) {
+          iconSet.add(overlay.icon)
+        }
       }
-    })
-
+    }
     const icons = [...iconSet]
     this._ready.then(() => {
       if (this._vectorType === VectorType.BILLBOARD) {

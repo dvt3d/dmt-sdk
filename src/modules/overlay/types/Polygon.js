@@ -2,9 +2,9 @@
  * @Author: Caven Chen
  */
 
-import Overlay from '../Overlay'
-import Parse from '../../parse/Parse'
-import State from '../../state/State'
+import Overlay from '../Overlay.js'
+import Parse from '../../parse/Parse.js'
+import State from '../../state/State.js'
 
 const DEF_STYLE = {
   color: '#ffffff',

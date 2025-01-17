@@ -1,1 +1,0 @@
-class Polygon3D {}

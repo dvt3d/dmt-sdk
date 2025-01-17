@@ -3,8 +3,9 @@
  */
 
 import Overlay from '../Overlay'
-import Parse from '../../parse/Parse'
 import State from '../../state/State'
+import Parse from '../../parse/Parse'
+import { LayerType } from '../../layer'
 
 const DEF_STYLE = {
   size: 1,
@@ -14,15 +15,15 @@ const DEF_STYLE = {
 }
 
 class Billboard extends Overlay {
-  constructor(lngLat, icon) {
-    if (!lngLat) {
-      throw 'lngLat is required'
+  constructor(position, icon) {
+    if (!position) {
+      throw 'position is required'
     }
     if (!icon) {
       throw 'icon is required'
     }
     super()
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+    this._position = Parse.parsePosition(position)
     this._icon = icon
     this._style = DEF_STYLE
     this._state = State.INITIALIZED
@@ -44,13 +45,13 @@ class Billboard extends Overlay {
     return this._show
   }
 
-  set lngLat(lngLat) {
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+  set position(position) {
+    this._position = Parse.parsePosition(position)
     this._layer?.fire('overlayChanged', this)
   }
 
-  get lngLat() {
-    return this._lngLat
+  get position() {
+    return this._position
   }
 
   set icon(icon) {
@@ -67,6 +68,30 @@ class Billboard extends Overlay {
 
   /**
    *
+   * @private
+   */
+  _mountedHook() {
+    if (this._layer.type === LayerType.VECTOR) {
+      const lngLat = this._position.toDegrees()
+      this._delegate = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [lngLat.lng, lngLat.lat],
+        },
+        properties: {
+          overlayId: this._overlayId,
+          id: this._bid,
+          show: this._show,
+          icon: this._icon,
+          ...this._style,
+        },
+      }
+    }
+  }
+
+  /**
+   *
    * @param style
    * @returns {Billboard}
    */
@@ -77,27 +102,6 @@ class Billboard extends Overlay {
     }
     this._layer?.fire('overlayChanged', this)
     return this
-  }
-
-  /**
-   *
-   * @returns {{}}
-   */
-  toFeature() {
-    return {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [this._lngLat.lng, this._lngLat.lat],
-      },
-      properties: {
-        overlayId: this._overlayId,
-        id: this._bid,
-        show: this._show,
-        icon: this._icon,
-        ...this._style,
-      },
-    }
   }
 }
 

@@ -1,5 +1,9 @@
+/**
+ * @Author: Caven Chen
+ */
 import { Event } from '../event'
 import { Util } from '../utils'
+import { LayerType } from '../layer'
 import OverlayType from './OverlayType'
 import State from '../state/State'
 
@@ -75,7 +79,11 @@ class Overlay extends Event {
   _onAdd(layer) {
     this._layer = layer
     this._mountedHook && this._mountedHook()
-    this._delegate && this._layer.delegate.add(this._delegate)
+    if (layer.type === LayerType.VECTOR) {
+      this._delegate && this._layer.dataJson.features.push(this._delegate)
+    } else {
+      this._delegate && this._layer.delegate.add(this._delegate)
+    }
     this._addedHook && this._addedHook()
     this._state = State.ADDED
   }

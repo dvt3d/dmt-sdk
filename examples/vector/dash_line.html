@@ -50,7 +50,7 @@
       dashArray:[2,2]
     })
     viewer.addLayer(layer)
-    let polyline = new DM.Polyline('-75, 35; -125, 35')
+    let polyline = new DM.Polyline(DM.Position.fromDegreesArray([-75, 35, -125, 35]))
     polyline.setStyle({
        color:'#ff0000',
        width: 3,

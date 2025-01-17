@@ -1,5 +1,5 @@
 export { default as LayerType } from './LayerType'
 export { default as Layer } from './Layer'
-export { default as DashLineLayer } from './2d/DashLineLayer'
-export { default as VectorLayer } from './2d/VectorLayer'
-export { default as MeshLayer } from './3d/MeshLayer'
+export { default as DashLineLayer } from './types/DashLineLayer.js'
+export { default as VectorLayer } from './types/VectorLayer.js'
+export { default as MeshLayer } from './types/MeshLayer.js'

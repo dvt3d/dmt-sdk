@@ -5,6 +5,7 @@
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 import State from '../../state/State'
+import { LayerType } from '../../layer/index.js'
 
 const DEF_STYLE = {
   size: 5,
@@ -17,12 +18,12 @@ const DEF_STYLE = {
 }
 
 class Point extends Overlay {
-  constructor(lngLat) {
-    if (!lngLat) {
-      throw 'lngLat is required'
+  constructor(position) {
+    if (!position) {
+      throw 'position is required'
     }
     super()
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+    this._position = Parse.parsePosition(position)
     this._style = DEF_STYLE
     this._state = State.INITIALIZED
   }
@@ -43,13 +44,37 @@ class Point extends Overlay {
     return this._show
   }
 
-  set lngLat(lngLat) {
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+  set position(position) {
+    this._position = Parse.parsePosition(position)
     this._layer?.fire('overlayChanged', this)
   }
 
-  get lngLat() {
-    return this._lngLat
+  get position() {
+    return this._position
+  }
+
+  /**
+   *
+   * @private
+   */
+  _mountedHook() {
+    if (this._layer.type === LayerType.VECTOR) {
+      const lngLat = this._position.toDegrees()
+      this._delegate = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [lngLat.lng, lngLat.lat],
+        },
+        properties: {
+          overlayId: this._overlayId,
+          id: this._bid,
+          show: this._show,
+          text: this._text,
+          ...this._style,
+        },
+      }
+    }
   }
 
   /**
@@ -64,26 +89,6 @@ class Point extends Overlay {
     }
     this._layer?.fire('overlayChanged', this)
     return this
-  }
-
-  /**
-   *
-   * @returns {{}}
-   */
-  toFeature() {
-    return {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [this._lngLat.lng, this._lngLat.lat],
-      },
-      properties: {
-        overlayId: this._overlayId,
-        id: this._bid,
-        show: this._show,
-        ...this._style,
-      },
-    }
   }
 }
 

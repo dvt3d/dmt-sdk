@@ -2,9 +2,10 @@
  * @Author: Caven Chen
  */
 
-import Overlay from '../Overlay'
-import Parse from '../../parse/Parse'
-import State from '../../state/State'
+import Overlay from '../Overlay.js'
+import Parse from '../../parse/Parse.js'
+import State from '../../state/State.js'
+import { LayerType } from '../../layer/index.js'
 
 const DEF_STYLE = {
   font: ['Open Sans Regular', 'Arial Unicode MS Regular'],
@@ -18,16 +19,16 @@ const DEF_STYLE = {
 }
 
 class Label extends Overlay {
-  constructor(lngLat, text) {
-    if (!lngLat) {
-      throw 'lngLat is required'
+  constructor(position, text) {
+    if (!position) {
+      throw 'position is required'
     }
 
     if (!text) {
       throw 'text is required'
     }
     super()
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+    this._position = Parse.parsePosition(position)
     this._text = text
     this._style = DEF_STYLE
     this._state = State.INITIALIZED
@@ -49,13 +50,13 @@ class Label extends Overlay {
     return this._show
   }
 
-  set lngLat(lngLat) {
-    this._lngLat = Parse.parseLngLatAlt(lngLat)
+  set position(position) {
+    this._position = Parse.parsePosition(position)
     this._layer?.fire('overlayChanged', this)
   }
 
-  get lngLat() {
-    return this._lngLat
+  get position() {
+    return this._position
   }
 
   set text(text) {
@@ -65,6 +66,26 @@ class Label extends Overlay {
 
   get text() {
     return this._text
+  }
+
+  _mountedHook() {
+    if (this._layer.type === LayerType.VECTOR) {
+      const lngLat = this._position.toDegrees()
+      this._delegate = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [lngLat.lng, lngLat.lat],
+        },
+        properties: {
+          overlayId: this._overlayId,
+          id: this._bid,
+          show: this._show,
+          text: this._text,
+          ...this._style,
+        },
+      }
+    }
   }
 
   /**
@@ -79,27 +100,6 @@ class Label extends Overlay {
     }
     this._layer?.fire('overlayChanged', this)
     return this
-  }
-
-  /**
-   *
-   * @returns {{}}
-   */
-  toFeature() {
-    return {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [this._lngLat.lng, this._lngLat.lat],
-      },
-      properties: {
-        overlayId: this._overlayId,
-        id: this._bid,
-        show: this._show,
-        text: this._text,
-        ...this._style,
-      },
-    }
   }
 }
 

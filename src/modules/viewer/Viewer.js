@@ -34,47 +34,61 @@ class Viewer {
     this._layerCache = {}
     this._ready = Promise.resolve()
     this._clock = new THREE.Clock()
+
     const containerEl =
       typeof container === 'string'
         ? document.getElementById(container)
         : container
+
     if (this._sceneMode === SceneMode.MAP_SCENE) {
       this._map = new MapLib.Map({
         container,
         style: DEF_STYLE,
         maxPitch: 85,
       })
+      this._ready = new Promise((resolve) => {
+        this._map.once('style.load', (e) => {
+          resolve()
+        })
+      })
       this._canvas = this._map.getCanvas()
 
-      //rename class
+      /**
+       * change the default container
+       */
       containerEl.className = containerEl.className.replace(
         ' maplibregl-map',
         ''
       )
       containerEl.firstElementChild.className = 'canvas-container'
       containerEl.removeChild(containerEl.lastElementChild)
-      this._ready = new Promise((resolve) => {
-        this._map.once('style.load', (e) => {
-          resolve()
-        })
+      this._scene = new MapScene(this._map, {
+        renderLoop: (ins) => {
+          ins.renderer.resetState()
+          this._domRenderer && this._domRenderer.render(ins.scene, ins.camera)
+          this.popup && this.popup.render(ins)
+          ins.renderer.render(ins.scene, ins.camera)
+        },
       })
-      this._scene = new MapScene(this._map, {})
     } else {
       const canvasContainer = DomUtil.create(
         'div',
         'canvas-container',
         containerEl
       )
-      this._canvas = document.createElement('canvas')
+      this._canvas = DomUtil.create('canvas', '', canvasContainer)
       this._canvas.style.width = containerEl.clientWidth + 'px'
       this._canvas.style.height = containerEl.clientHeight + 'px'
-      canvasContainer.appendChild(this._canvas)
       this._scene = new THREEScene(this)
     }
 
     this._canvas.className = 'viewer-canvas'
 
-    // new MouseEvent(this)
+    new MouseEvent(this)
+
+    /**
+     * Register the widgets
+     */
 
     this._widgetContainer = DomUtil.create(
       'div',
@@ -85,6 +99,19 @@ class Viewer {
     for (let key in widgets) {
       widgets[key].fire('install', this)
     }
+
+    /**
+     * Register the dom layer renderer
+     */
+    this._domLayerContainer = DomUtil.create(
+      'div',
+      'dom-layer-container',
+      containerEl
+    )
+    this._domRenderer = new THREE.CSS3DRenderer({
+      element: this._domLayerContainer,
+    })
+    this._domRenderer.setSize(containerEl.clientWidth, containerEl.clientHeight)
   }
 
   get container() {
@@ -93,6 +120,10 @@ class Viewer {
 
   get widgetContainer() {
     return this._widgetContainer
+  }
+
+  get domLayerContainer() {
+    return this._domLayerContainer
   }
 
   get map() {

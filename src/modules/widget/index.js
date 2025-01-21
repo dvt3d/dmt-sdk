@@ -1,20 +1,23 @@
 /**
  * @Author: Caven Chen
  */
+
+import BaseLayerPicker from './types/BaseLayerPicker'
 import Compass from './types/Compass'
-import ZoomController from './types/ZoomController'
 import DistanceLegend from './types/DistanceLegend'
 import HawkEyeMap from './types/HawkEyeMap'
 import LoadingMask from './types/LoadingMask'
-import BaseLayerPicker from './types/BaseLayerPicker'
+import Popup from './types/Popup'
+import ZoomController from './types/ZoomController'
 
 export function createWidgets() {
   return {
+    baseLayerPicker: new BaseLayerPicker(),
     compass: new Compass(),
-    zoomController: new ZoomController(),
     distanceLegend: new DistanceLegend(),
     hawkEyeMap: new HawkEyeMap(),
     loadingMask: new LoadingMask(),
-    baseLayerPicker: new BaseLayerPicker(),
+    popup: new Popup(),
+    zoomController: new ZoomController(),
   }
 }

@@ -1,7 +1,8 @@
 @use 'viewer';
-@use "base-layer-picker";
+@use 'base-layer-picker';
 @use 'compass';
 @use 'distance-legend';
 @use 'hawk-eye-map';
-@use 'zoom-controller';
 @use 'loading-mask';
+@use 'popup';
+@use 'zoom-controller';

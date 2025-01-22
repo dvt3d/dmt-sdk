@@ -70,8 +70,11 @@ class Viewer {
       this._scene = new MapScene(this._map, {
         renderLoop: (ins) => {
           ins.renderer.resetState()
-          this._domRenderer && this._domRenderer.render(ins.scene, ins.camera)
           this.popup && this.popup.render(ins)
+          this._domRenderer &&
+            this._domRenderer &&
+            this._hasDomLayer() &&
+            this._domRenderer.render(ins.scene, ins.camera)
           ins.renderer.render(ins.scene, ins.camera)
         },
       })
@@ -108,15 +111,19 @@ class Viewer {
     /**
      * Register the dom layer renderer
      */
-    this._domLayerContainer = DomUtil.create(
-      'div',
-      'dom-layer-container',
-      containerEl
-    )
     this._domRenderer = new THREE.CSS3DRenderer({
-      element: this._domLayerContainer,
+      element: DomUtil.create('div', 'dom-layer-container', containerEl),
     })
-    this._domRenderer.setSize(containerEl.clientWidth, containerEl.clientHeight)
+    this._domRenderer.setSize(
+      this._canvas.clientWidth,
+      this._canvas.clientHeight
+    )
+    window.addEventListener('resize', () => {
+      this._domRenderer.setSize(
+        this._canvas.clientWidth,
+        this._canvas.clientHeight
+      )
+    })
   }
 
   get container() {
@@ -125,10 +132,6 @@ class Viewer {
 
   get widgetContainer() {
     return this._widgetContainer
-  }
-
-  get domLayerContainer() {
-    return this._domLayerContainer
   }
 
   get map() {
@@ -165,6 +168,15 @@ class Viewer {
       .forEach((layer) => {
         layer.fire('add', this)
       })
+  }
+
+  _hasDomLayer() {
+    for (let key in this._layerCache) {
+      if (this._layerCache[key].type === LayerType.DOM) {
+        return true
+      }
+    }
+    return false
   }
 
   /**
@@ -336,7 +348,11 @@ class Viewer {
     if (this._layerCache[layer.id]) {
       throw `the layer ${layer.id} already exists`
     }
+    const filters = [LayerType.VECTOR, LayerType.CLUSTER, LayerType.GEOJSON]
     if (this._sceneMode === SceneMode.MAP_SCENE) {
+      if (!filters.includes(layer.type)) {
+        layer.fire('add', this)
+      }
       this._layerCache[layer.id] = layer
     } else {
       layer.fire('add', this)
@@ -402,6 +418,15 @@ class Viewer {
       // this._map.easeTo({})
     }
     return this
+  }
+
+  /**
+   *
+   * @param {*} id
+   * @returns
+   */
+  hasLayer(id) {
+    return !!this._layerCache[id]
   }
 
   /**

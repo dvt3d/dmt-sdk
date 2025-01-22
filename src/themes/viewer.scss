@@ -1,4 +1,16 @@
-
 .canvas-container {
-   cursor: pointer !important;
+  cursor: pointer !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dom-layer-container {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  .div-icon {
+    pointer-events: auto;
+  }
 }

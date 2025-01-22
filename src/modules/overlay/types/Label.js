@@ -2,10 +2,10 @@
  * @Author: Caven Chen
  */
 
-import Overlay from '../Overlay.js'
-import Parse from '../../parse/Parse.js'
-import State from '../../state/State.js'
-import { LayerType } from '../../layer/index.js'
+import Overlay from '../Overlay'
+import Parse from '../../parse/Parse'
+import State from '../../state/State'
+import { LayerType } from '../../layer'
 
 const DEF_STYLE = {
   font: ['Open Sans Regular', 'Arial Unicode MS Regular'],

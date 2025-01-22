@@ -12,7 +12,14 @@ class MeshLayer extends Layer {
     this._delegate.name = id
   }
 
+  get type() {
+    return Layer.getType('mesh')
+  }
+
   set show(show) {
+    if (this._show === show) {
+      return
+    }
     this._show = show
     this._delegate.visible = show
   }
@@ -21,61 +28,12 @@ class MeshLayer extends Layer {
     return this._show
   }
 
-  /**
-   *
-   * @param {*} viewer
-   */
-  _onAdd(viewer) {
-    this._viewer = viewer
-    const world = viewer.scene.world
+  _mountedHook() {
+    const world = this._viewer.scene.world
     world.add(this._delegate)
   }
-
-  /**
-   *
-   */
-  _onRemove() {}
-
-  /**
-   *
-   * @param overlay
-   * @returns {MeshLayer}
-   */
-  addOverlay(overlay) {
-    if (!overlay) {
-      throw 'overlay is required'
-    }
-    if (this._cache[overlay.overlayId]) {
-      throw `overlay ${overlay.overlayId} already exists`
-    }
-    overlay.fire('add', this)
-    this._cache[overlay.overlayId] = overlay
-    return this
-  }
-
-  /**
-   *
-   * @param overlays
-   * @returns {MeshLayer}
-   */
-  addOverlays(overlays) {
-    if (!overlays) {
-      throw 'overlays is required'
-    }
-    if (!Array.isArray(overlays)) {
-      throw 'overlays must be an array'
-    }
-    overlays.forEach((overlay) => {
-      this.addOverlay(overlay)
-    })
-    return this
-  }
-
-  /**
-   *
-   * @param overlay
-   */
-  removeOverlay(overlay) {}
 }
+
+Layer.registerType('mesh')
 
 export default MeshLayer

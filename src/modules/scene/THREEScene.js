@@ -27,6 +27,7 @@ class THREEScene {
     this._world = new THREE.Group()
     this._world.name = 'world'
     this._scene.add(this._world)
+
     window.addEventListener('resize', () => {
       this._camera.aspect =
         this._viewer.canvas.clientWidth / this._viewer.canvas.clientHeight
@@ -67,6 +68,7 @@ class THREEScene {
     this._controls.update()
     this._viewer.popup && this._viewer.popup.render(this) // render the popup
     this._viewer._domRenderer &&
+      this._viewer._hasDomLayer() &&
       this._viewer._domRenderer.render(this._scene, this._camera) // render the domLayer
     this._renderer.render(this._scene, this._camera)
   }

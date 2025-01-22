@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>amap</title>
     <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" type='text/css' rel="stylesheet"  />
+    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
     <style>
       * {
         margin: 0;
@@ -34,28 +34,38 @@
 
     <script>
       let viewer = undefined
-      function initViewer(){
+      function initViewer() {
         viewer = new DM.Viewer('viewer-container')
-        let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP)
-        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP ,{
-          style:'img'
-        })
-        let baseLayer_cva = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP ,{
-          style:'cva'
-        })
-        viewer.addBaseLayer(baseLayer_elec,{
-          iconUrl:'../assets/icon/elec.png',
-          name:'电子'
-        }).addBaseLayer(baseLayer_img,{
-          iconUrl:'../assets/icon/img.png',
-          name:'影像'
-        }).addBaseLayer([baseLayer_img,baseLayer_cva],{
-          iconUrl:'../assets/icon/img.png',
-          name:'影像+注记'
-        })
+        let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(
+          DM.BaseLayerType.AMAP
+        )
+        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(
+          DM.BaseLayerType.AMAP,
+          {
+            style: 'img',
+          }
+        )
+        let baseLayer_cva = DM.BaseLayerFactory.createBaseLayer(
+          DM.BaseLayerType.AMAP,
+          {
+            style: 'cva',
+          }
+        )
+        viewer
+          .addBaseLayer(baseLayer_elec, {
+            iconUrl: '../assets/icon/elec.png',
+            name: '电子',
+          })
+          .addBaseLayer(baseLayer_img, {
+            iconUrl: '../assets/icon/img.png',
+            name: '影像',
+          })
+          .addBaseLayer([baseLayer_img, baseLayer_cva], {
+            iconUrl: '../assets/icon/img.png',
+            name: '影像+注记',
+          })
       }
       DM.ready().then(initViewer)
-    </script>
     </script>
   </body>
 </html>

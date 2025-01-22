@@ -234,11 +234,11 @@ const EXAMPLE_LIST = [
   },
   {
     name: 'DOM要素',
-    folder: 'html',
+    folder: 'dom',
     children: [
       {
-        name: 'html点',
-        page: 'point_html.html',
+        name: 'DIV 图标',
+        page: 'div_icon.html',
       },
     ],
   },

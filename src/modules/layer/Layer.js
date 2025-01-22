@@ -87,6 +87,33 @@ class Layer extends Event {
    * @returns
    */
   addOverlay(overlay) {
+    if (!overlay) {
+      return this
+    }
+    if (this._cache[overlay.overlayId]) {
+      throw `overlay ${overlay.overlayId} already exists`
+    }
+    overlay.fire('add', this)
+    this._cache[overlay.overlayId] = overlay
+    return this
+  }
+
+  /**
+   *
+   * @param overlays
+   * @returns {Layer}
+   */
+  addOverlays(overlays) {
+    if (!Array.isArray(overlays)) {
+      return this
+    }
+    for (const overlay of overlays) {
+      try {
+        this.addOverlay(overlay)
+      } catch (e) {
+        console.error(e)
+      }
+    }
     return this
   }
 
@@ -96,24 +123,33 @@ class Layer extends Event {
    * @returns {Layer}
    */
   removeOverlay(overlay) {
+    if (!overlay) {
+      return this
+    }
+    if (!this._cache[overlay.overlayId]) {
+      throw `overlay ${overlay.overlayId} is not exists`
+    }
+    overlay.fire('remove', this)
+    delete this._cache[overlay.overlayId]
     return this
   }
 
   /**
    *
-   * @param Overlays
+   * @param overlays
    * @returns {Layer}
    */
-  addOverlays(Overlays) {
-    return this
-  }
-
-  /**
-   *
-   * @param Overlays
-   * @returns {Layer}
-   */
-  removeOverlays(Overlays) {
+  removeOverlays(overlays) {
+    if (!Array.isArray(overlays)) {
+      return this
+    }
+    for (const overlay of overlays) {
+      try {
+        this.removeOverlay(overlay)
+      } catch (e) {
+        console.error(e)
+      }
+    }
     return this
   }
 

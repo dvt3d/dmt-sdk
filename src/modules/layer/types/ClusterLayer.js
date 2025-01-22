@@ -6,7 +6,7 @@ import Layer from '../Layer'
 
 class ClusterLayer extends Layer {
   constructor(id, options = {}) {
-    super()
+    super(id)
     this._dataJson = {
       type: 'FeatureCollection',
       features: [],

@@ -1,6 +1,10 @@
-import { THREE } from '../../../name-space/index.js'
-import { MaterialCache } from '../../material/index.js'
-import Overlay from '../Overlay.js'
+/**
+ * @Author: Caven Chen
+ */
+
+import { THREE } from '../../../name-space'
+import { MaterialCache } from '../../material'
+import Overlay from '../Overlay'
 
 class Box extends Overlay {
   constructor(position, dimensions) {

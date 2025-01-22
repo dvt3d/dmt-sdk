@@ -28,6 +28,10 @@ class VectorLayer extends Layer {
   }
 
   set show(show) {
+    if (this._show === show) {
+      return
+    }
+    this._show = show
     if (this._viewer) {
       this._viewer.map.setLayoutProperty(this._id, 'visibility', show)
     }

@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>label</title>
+    <title>vector</title>
     <script src="../libs/dm.min.js"></script>
     <script src="../dat.gui.min.js"></script>
     <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
@@ -57,15 +57,29 @@
             url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
           }
         )
-        viewer.addBaseLayer(baseLayer_basic)
-        layer = new DM.VectorLayer('layer', DM.VectorType.LABEL)
-        let labels = generatePosition(30).map((item) => {
-          let label = new DM.Label(item, '数字视觉')
-          label.setStyle({ color: '#0000ff' })
-          return label
-        })
-        layer.addOverlays(labels)
+
+        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(
+          DM.BaseLayerType.AMAP,
+          {
+            style: 'img',
+          }
+        )
+        viewer
+          .addBaseLayer(baseLayer_basic, {
+            iconUrl: '../assets/icon/elec.png',
+            name: '电子',
+          })
+          .addBaseLayer(baseLayer_img, {
+            iconUrl: '../assets/icon/img.png',
+            name: '影像',
+          })
+        layer = new DM.DomLayer('layer')
         viewer.addLayer(layer)
+        let divIcons = generatePosition(20).map((item) => {
+          let divIcon = new DM.DivIcon(item, '我是一个DIV')
+          return divIcon
+        })
+        layer.addOverlays(divIcons)
       }
 
       DM.ready().then(initViewer)

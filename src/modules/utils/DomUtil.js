@@ -243,6 +243,25 @@ class DomUtil {
     mov.setAttribute('type', 'video/quicktime')
     return videoEl
   }
+
+  /**
+   *
+   * @param {*} container
+   * @param {*} content
+   */
+  static setContent(container, content) {
+    if (!content) {
+      return
+    }
+    if (typeof content === 'string') {
+      container.innerHTML = content
+    } else if (content instanceof Element) {
+      while (content.hasChildNodes()) {
+        content.removeChild(container.firstChild)
+      }
+      container.appendChild(content)
+    }
+  }
 }
 
 export default DomUtil

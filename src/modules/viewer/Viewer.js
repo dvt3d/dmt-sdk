@@ -1,13 +1,18 @@
-import THREEScene from '../scene/THREEScene'
+/**
+ * @Author: Caven Chen
+ */
+
 import { MapLib, THREE } from '../../name-space'
+
 import { MapScene } from '@dvgis/maplibre-three-plugin'
+import THREEScene from '../scene/THREEScene'
 import { SceneMode } from '../constant'
 import { BaseLayerCollection, BaseLayerType } from '../base-layer'
 import { LayerType } from '../layer'
 import { MouseEvent } from '../event'
 import { DomUtil } from '../utils'
 import { createWidgets } from '../widget'
-import { getParam } from '../../global-api/index.js'
+import { getParam } from '../../global-api'
 
 const DEF_STYLE = {
   version: 8,
@@ -358,6 +363,15 @@ class Viewer {
 
   /**
    *
+   * @param {*} id
+   * @returns
+   */
+  getLayer(id) {
+    return this._layerCache[id] || undefined
+  }
+
+  /**
+   *
    * @returns {*[]}
    */
   getLayers() {
@@ -399,36 +413,6 @@ class Viewer {
     // if (this._sceneMode === SceneMode.MAP_SCENE) {
     // } else {
     // }
-    return this
-  }
-
-  /**
-   *
-   * @param type
-   * @param callback
-   * @returns {Viewer}
-   */
-  on(type, callback) {
-    return this
-  }
-
-  /**
-   *
-   * @param type
-   * @param callback
-   * @returns {Viewer}
-   */
-  off(type, callback) {
-    return this
-  }
-
-  /**
-   *
-   * @param type
-   * @param callback
-   * @returns {Viewer}
-   */
-  once(type, callback) {
     return this
   }
 

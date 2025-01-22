@@ -18,6 +18,7 @@ class Overlay extends Event {
     this._delegate = undefined
     this._layer = undefined
     this._state = undefined
+    this._allowDrillPicking = false
     this.on('add', this._onAdd.bind(this))
     this.on('remove', this._onRemove.bind(this))
   }
@@ -40,6 +41,14 @@ class Overlay extends Event {
 
   get attr() {
     return this._attr
+  }
+
+  set allowDrillPicking(allowDrillPicking) {
+    this._allowDrillPicking = allowDrillPicking
+  }
+
+  get allowDrillPicking() {
+    return this._allowDrillPicking
   }
 
   get delegate() {

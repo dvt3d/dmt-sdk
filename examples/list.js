@@ -54,7 +54,12 @@ const EXAMPLE_LIST = [
   {
     name: '场景事件',
     folder: 'event',
-    children: [],
+    children: [
+      {
+        name: '鼠标事件',
+        page: 'mouse_event.html',
+      },
+    ],
   },
   {
     name: '在线地图',
@@ -149,31 +154,31 @@ const EXAMPLE_LIST = [
     folder: 'vector',
     children: [
       {
-        name:'点',
+        name: '点',
         page: 'point.html',
       },
       {
-        name:'图标',
+        name: '图标',
         page: 'billboard.html',
       },
       {
-        name:'文本',
+        name: '文本',
         page: 'label.html',
       },
       {
-        name:'线',
+        name: '线',
         page: 'polyline.html',
       },
       {
-        name:'虚线',
+        name: '虚线',
         page: 'dash_line.html',
       },
       {
-        name:'面',
+        name: '面',
         page: 'polygon.html',
       },
       {
-        name:'拉伸体',
+        name: '拉伸体',
         page: 'extrusion.html',
       },
     ],

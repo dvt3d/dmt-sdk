@@ -1,4 +1,3 @@
-import Event from '../Event'
 import { SceneMode } from '../../constant'
 
 class MouseEvent {
@@ -18,16 +17,75 @@ class MouseEvent {
     }
   }
 
+  _raycast() {}
+
   /**
    *
    */
-  _getMouseInfo(mousePosition) {}
+  _getMouseInfo(posInfo) {
+    let info = {
+      layers: [],
+      overlays: [],
+    }
+    if (this._viewer.sceneMode === SceneMode.MAP_SCENE) {
+      let features = this._viewer.map.queryRenderedFeatures([
+        posInfo.mouse.x,
+        posInfo.mouse.y,
+      ])
+      for (let i = 0; i < features.length; i++) {
+        let feature = features[i]
+        let layerId = feature.layer.id
+        let layer = this._viewer.getLayer(layerId)
+        if (layer) {
+          info.layers.push(this._viewer.getLayer(layerId))
+          let overlay = layer.getOverlay(feature.properties.overlayId)
+          if (overlay) {
+            info.overlays.push(overlay)
+          }
+        }
+      }
+    }
+    return info
+  }
+
+  _raiseEvent(type, info) {
+    let overlays = info.overlays
+    let layers = info.layers
+    if (overlays.length) {
+      for (let i = 0; i < overlays.length; i++) {
+        let overlay = overlays[i]
+        overlay.fire(type, {
+          overlay,
+        })
+        if (!overlay.allowDrillPicking) {
+          break
+        }
+      }
+    } else if (!overlays.length && layers.length) {
+      layers.forEach((layer) => {
+        layer.fire(type, {})
+      })
+    } else {
+      //this._viewer.fire(type, {})
+    }
+  }
 
   /**
    *
    * @param {*} e
    */
-  _onClick(e) {}
+  _onClick(e) {
+    let posInfo = {
+      lngLat: [],
+      vec: [],
+      mouse: [],
+    }
+    if (this._viewer.sceneMode === SceneMode.MAP_SCENE) {
+      posInfo.mouse = { x: e.point.x, y: e.point.y }
+    }
+    let info = this._getMouseInfo(posInfo)
+    this._raiseEvent('click', info)
+  }
 
   /**
    *

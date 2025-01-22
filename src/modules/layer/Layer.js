@@ -3,14 +3,12 @@
  */
 import { Event } from '../event'
 import LayerType from './LayerType'
-import { Util } from '../utils'
 import State from '../state/State.js'
 
 class Layer extends Event {
   constructor(id) {
     super()
-    this._id = Util.uuid()
-    this._bid = id || Util.uuid()
+    this._id = id
     this._show = true
     this._attr = {}
     this._cache = {}
@@ -21,12 +19,8 @@ class Layer extends Event {
     this.on('remove', this._onRemove.bind(this))
   }
 
-  get layerId() {
-    return this._id
-  }
-
   get id() {
-    return this._bid
+    return this._id
   }
 
   set attr(attr) {
@@ -124,6 +118,46 @@ class Layer extends Event {
   }
 
   /**
+   * Returns the overlay by overlayId
+   * @param overlayId
+   * @returns {*|undefined}
+   */
+  getOverlay(overlayId) {
+    return this._cache[overlayId] || undefined
+  }
+
+  /**
+   * Returns the overlay by bid
+   * @param id
+   * @returns {any}
+   */
+  getOverlayById(id) {
+    let overlay = undefined
+    Object.keys(this._cache).forEach((key) => {
+      if (this._cache[key].id === id) {
+        overlay = this._cache[key]
+      }
+    })
+    return overlay
+  }
+
+  /**
+   * Returns the overlays by attrName and AttrVal
+   * @param attrName
+   * @param attrVal
+   * @returns {[]}
+   */
+  getOverlaysByAttr(attrName, attrVal) {
+    let result = []
+    this.eachOverlay((item) => {
+      if (item.attr[attrName] === attrVal) {
+        result.push(item)
+      }
+    }, this)
+    return result
+  }
+
+  /**
    *
    * @returns
    */
@@ -133,6 +167,19 @@ class Layer extends Event {
       result.push(this._cache[key])
     }
     return result
+  }
+
+  /**
+   * Iterate through each overlay and pass it as an argument to the callback function
+   * @param method
+   * @param context
+   * @returns {Layer}
+   */
+  eachOverlay(method, context) {
+    Object.keys(this._cache).forEach((key) => {
+      method && method.call(context || this, this._cache[key])
+    })
+    return this
   }
 
   /**

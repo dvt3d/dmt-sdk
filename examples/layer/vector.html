@@ -51,6 +51,14 @@
 
       function initViewer() {
         viewer = new DM.Viewer('viewer-container')
+
+        let baseLayer = DM.BaseLayerFactory.createBaseLayer(
+          DM.BaseLayerType.STYLE,
+          {
+            url: 'https://demotiles.maplibre.org/style.json',
+          }
+        )
+
         let baseLayer_basic = DM.BaseLayerFactory.createBaseLayer(
           DM.BaseLayerType.STYLE,
           {
@@ -70,18 +78,26 @@
         )
 
         viewer
-          .addBaseLayer(baseLayer_img, {
+          .addBaseLayer(baseLayer, {
             iconUrl: '../assets/icon/vec.png',
             name: '样式一',
           })
-          .addBaseLayer(baseLayer_elec, {
+          .addBaseLayer(baseLayer_basic, {
             iconUrl: '../assets/icon/vec_1.png',
             name: '样式二',
+          })
+          .addBaseLayer(baseLayer_elec, {
+            iconUrl: '../assets/icon/elec.png',
+            name: '电子',
+          })
+          .addBaseLayer(baseLayer_img, {
+            iconUrl: '../assets/icon/img.png',
+            name: '影像',
           })
 
         layer = new DM.VectorLayer('layer', DM.VectorType.BILLBOARD)
 
-        let billboards = generatePosition(50).map((item) => {
+        let billboards = generatePosition(10).map((item) => {
           let billboard = new DM.Billboard(item, '../assets/icon/camera_2.png')
           billboard.setStyle({
             size: 0.8,

@@ -28,10 +28,7 @@ class MouseEvent {
       overlays: [],
     }
     if (this._viewer.sceneMode === SceneMode.MAP_SCENE) {
-      let features = this._viewer.map.queryRenderedFeatures([
-        posInfo.mouse.x,
-        posInfo.mouse.y,
-      ])
+      let features = this._viewer.map.queryRenderedFeatures(posInfo.mouse)
       for (let i = 0; i < features.length; i++) {
         let feature = features[i]
         let layerId = feature.layer.id
@@ -78,10 +75,10 @@ class MouseEvent {
     let posInfo = {
       lngLat: [],
       vec: [],
-      mouse: [],
+      mouse: {},
     }
     if (this._viewer.sceneMode === SceneMode.MAP_SCENE) {
-      posInfo.mouse = { x: e.point.x, y: e.point.y }
+      posInfo.mouse = e.point
     }
     let info = this._getMouseInfo(posInfo)
     this._raiseEvent('click', info)

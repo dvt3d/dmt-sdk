@@ -6,7 +6,7 @@ import { THREE } from '../../../name-space'
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 import State from '../../state/State'
-import { DomUtil } from '../../utils'
+import { DomUtil, Util } from '../../utils'
 
 class DivIcon extends Overlay {
   constructor(position, content) {
@@ -20,7 +20,7 @@ class DivIcon extends Overlay {
     this._position = Parse.parsePosition(position)
     this._content = content
     this._wrapper = DomUtil.create('div', 'div-icon')
-    this._delegate = new THREE.CSS3DSprite(this._el)
+    this._delegate = new THREE.CSS3DSprite(this._wrapper)
     this._state = State.INITIALIZED
   }
 
@@ -28,15 +28,12 @@ class DivIcon extends Overlay {
     return Overlay.getType('div_icon')
   }
 
-  get wrapper() {
-    return this
-  }
-
   set show(show) {
     if (this._show == show) {
       return
     }
     this._show = show
+    this._delegate.visible = show
   }
 
   get show() {
@@ -45,6 +42,7 @@ class DivIcon extends Overlay {
 
   set position(position) {
     this._position = Parse.parsePosition(position)
+    this._delegate.position.copy(this._position)
   }
 
   get position() {
@@ -53,7 +51,7 @@ class DivIcon extends Overlay {
 
   set content(content) {
     this._content = content
-    DomUtil.setContent(this._delegate.element, content)
+    DomUtil.setContent(this._wrapper, content)
   }
 
   get content() {
@@ -62,15 +60,29 @@ class DivIcon extends Overlay {
 
   _mountedHook() {
     this._delegate.position.copy(this._position)
-    DomUtil.setContent(this._delegate.element, this._content)
+    DomUtil.setContent(this._wrapper, this._content)
+    let params = {
+      layer: this._layer,
+      overlay: this,
+      position: this._position,
+    }
+    this._wrapper.addEventListener('click', () => {
+      this.fire('click', params)
+    })
   }
 
   /**
    *
    * @param style
-   * @returns {Label}
+   * @returns {DivIcon}
    */
   setStyle(style) {
+    if (!style || Object.keys(style).length === 0) {
+      return this
+    }
+    Util.merge(this._style, style)
+    this._style.className &&
+      DomUtil.addClass(this._wrapper, this._style.className)
     return this
   }
 }

@@ -12,5 +12,12 @@
   left: 0;
   .div-icon {
     pointer-events: auto;
+    user-select: none;
+    background-color: #fff;
+    padding: 2px 2px;
+    border-radius: 4px;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

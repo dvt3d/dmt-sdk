@@ -314,23 +314,28 @@ class Viewer {
         return this
       }
       this._baseLayerCache[currentId].selected = false
-      //change vector base layer, needs reAdd the 2d layers
-      if (this._baseLayerCache[currentId].getType() === BaseLayerType.STYLE) {
-        const _this = this
-        if (this._baseLayerCache[nextId].getType() === BaseLayerType.STYLE) {
-          this._map.once('style.load', () => {
-            _this._reAddLayers() // reAdd all layers
-          })
-          _this._baseLayerCache[nextId].selected = true
-        } else {
-          this._map.once('style.load', () => {
-            _this._reAddLayers() // reAdd all layers
-            _this._baseLayerCache[nextId].selected = true
-          })
-          this._map.setStyle(DEF_STYLE, { diff: false }) //remove all layer
-        }
-      } else {
+
+      let currentType = this._baseLayerCache[currentId].getType()
+      let nextType = this._baseLayerCache[nextId].getType()
+
+      //change to vector base layer, needs re-add the 2d layers
+      if (nextType === BaseLayerType.STYLE) {
+        this._map.once('style.load', () => {
+          this._reAddLayers() // re-add 2d layers
+        })
         this._baseLayerCache[nextId].selected = true
+      } else {
+        if (currentType !== BaseLayerType.STYLE) {
+          // from raster to raster, no needs re-add the 2d layers
+          this._baseLayerCache[nextId].selected = true
+        } else {
+          // from vector to raster, needs readd the 2d layers
+          this._map.once('style.load', () => {
+            this._reAddLayers() // re-add 2d layer
+            this._baseLayerCache[nextId].selected = true
+          })
+          this._map.setStyle(DEF_STYLE, { diff: false }) //remove 2d layer
+        }
       }
     })
     return this

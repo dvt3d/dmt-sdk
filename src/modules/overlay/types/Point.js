@@ -10,7 +10,7 @@ import { LayerType } from '../../layer/index.js'
 const DEF_STYLE = {
   size: 5,
   color: '#ffffff',
-  blur: '0',
+  blur: 0,
   opacity: 1,
   strokeWidth: 2,
   strokeColor: '#0000ff',
@@ -64,13 +64,12 @@ class Point extends Overlay {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [lngLat.lng, lngLat.lat],
+          coordinates: [+lngLat.lng, +lngLat.lat],
         },
         properties: {
           overlayId: this._overlayId,
           id: this._bid,
           show: this._show,
-          text: this._text,
           ...this._style,
         },
       }

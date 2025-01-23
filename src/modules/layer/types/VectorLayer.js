@@ -170,10 +170,27 @@ class VectorLayer extends Layer {
 
   /**
    *
-   * @param viewer
-   * @private
+   * @param {*} icons
+   * @param {*} callback
    */
-  _mountedHook() {
+  _loadIcons(icons, callback) {
+    const promises = icons.map((icon) => {
+      if (!this._viewer.map.hasImage(icon)) {
+        return this._viewer.map.loadImage(icon)
+      }
+      return null
+    })
+    Promise.allSettled(promises).then((results) => {
+      results.forEach((result, index) => {
+        if (result.value) {
+          this._viewer.map.addImage(icons[index], result.value.data)
+        }
+      })
+      callback && callback()
+    })
+  }
+
+  _mountSourceAndLayer() {
     this._viewer.map.addSource(this._sourceId, {
       type: 'geojson',
       data: this._dataJson,
@@ -188,7 +205,30 @@ class VectorLayer extends Layer {
     })
     this._source = this._viewer.map.getSource(this._sourceId)
     this._delegate = this._viewer.map.getLayer(this._id)
-    this.fire('added')
+  }
+
+  /**
+   *
+   * @param viewer
+   * @private
+   */
+  _mountedHook() {
+    if (
+      this._vectorType === VectorType.BILLBOARD &&
+      this._dataJson.features.length
+    ) {
+      let iconSet = new Set()
+      for (let i = 0; i < this._dataJson.features.length; i++) {
+        iconSet.add(this._dataJson.features[i].properties.icon)
+      }
+      this._loadIcons([...iconSet], () => {
+        this._mountSourceAndLayer()
+        this.fire('added')
+      })
+    } else {
+      this._mountSourceAndLayer()
+      this.fire('added')
+    }
   }
 
   /**
@@ -253,14 +293,14 @@ class VectorLayer extends Layer {
       return this
     }
 
-    const filters = overlays.filter(
+    let filters = overlays.filter(
       (overlay) => overlay.type.toLocaleLowerCase() !== this._vectorType
     )
     if (filters && filters.length > 0) {
       throw 'the overlays type must be match the layer vector type'
     }
-    const iconSet = new Set()
-    for (const overlay of overlays) {
+    let iconSet = new Set()
+    for (let overlay of overlays) {
       try {
         if (this._cache[overlay.overlayId]) {
           throw `overlay ${overlay.overlayId} already exists`
@@ -275,21 +315,9 @@ class VectorLayer extends Layer {
         }
       }
     }
-    const icons = [...iconSet]
     this._ready.then(() => {
       if (this._vectorType === VectorType.BILLBOARD) {
-        const promises = icons.map((icon) => {
-          if (!this._viewer.map.hasImage(icon)) {
-            return this._viewer.map.loadImage(icon)
-          }
-          return null
-        })
-        Promise.allSettled(promises).then((results) => {
-          results.forEach((result, index) => {
-            if (result.value) {
-              this._viewer.map.addImage(icons[index], result.value.data)
-            }
-          })
+        this._loadIcons([...iconSet], () => {
           this._source && this._source.setData(this._dataJson)
         })
       } else {

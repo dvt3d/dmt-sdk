@@ -1,3 +1,7 @@
+/**
+ * @Author: Caven Chen
+ */
+
 class BaseLayer {
   constructor(provider, options = {}) {
     this._provider = provider

@@ -5,7 +5,7 @@
 import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 import State from '../../state/State'
-import { LayerType } from '../../layer/index.js'
+import { LayerType } from '../../layer'
 
 const DEF_STYLE = {
   size: 5,

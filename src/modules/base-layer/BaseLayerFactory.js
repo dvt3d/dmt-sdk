@@ -1,14 +1,15 @@
 import BaseLayerType from './BaseLayerType'
 import BaseLayer from './BaseLayer'
-import AMapProvider from './provider/AMapProvider.js'
+import AMapProvider from './provider/AMapProvider'
 import StyleProvider from './provider/StyleProvider'
-import XYZProvider from './provider/XYZProvider.js'
+import XYZProvider from './provider/XYZProvider'
+import TDTProvider from './provider/TDTProvider'
 
 class BaseLayerFactory {
   /**
    *
    * @param {*} options
-   * @returns
+   * @returns {BaseLayer}
    */
   static createStyleBaseLayer(options = {}) {
     return new BaseLayer(new StyleProvider(options), options)
@@ -17,7 +18,7 @@ class BaseLayerFactory {
   /**
    *
    * @param {*} options
-   * @returns
+   * @returns {BaseLayer}
    */
   static createXYZBaseLayer(options = {}) {
     return new BaseLayer(new XYZProvider(options), options)
@@ -26,10 +27,19 @@ class BaseLayerFactory {
   /**
    *
    * @param {*} options
-   * @returns
+   * @returns {BaseLayer}
    */
   static createAMapBaseLayer(options = {}) {
     return new BaseLayer(new AMapProvider(options), options)
+  }
+
+  /**
+   *
+   * @param {*} options
+   * @returns {BaseLayer}
+   */
+  static createTDTBaseLayer(options = {}) {
+    return new BaseLayer(new TDTProvider(options), options)
   }
 
   /**
@@ -46,6 +56,8 @@ class BaseLayerFactory {
         return this.createAMapBaseLayer(options)
       case BaseLayerType.XYZ:
         return this.createXYZBaseLayer(options)
+      case BaseLayerType.TDT:
+        return this.createTDTBaseLayer(options)
       default:
         return null
     }

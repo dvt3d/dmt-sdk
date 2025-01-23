@@ -3,8 +3,8 @@
  */
 
 import Overlay from '../Overlay.js'
-import Parse from '../../parse/Parse.js'
-import State from '../../state/State.js'
+import Parse from '../../parse/Parse'
+import State from '../../state/State'
 
 const DEF_STYLE = {
   color: '#ffffff',

@@ -1,3 +1,3 @@
-let LayerType = {}
+const LayerType = {}
 
 export default LayerType

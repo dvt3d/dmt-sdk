@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>tdt</title>
+    <script src="../libs/dm.min.js"></script>
+    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .viewer-container {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewer-container" class="viewer-container"></div>
+
+    <script>
+      let viewer = undefined
+      function initViewer() {
+        viewer = new DM.Viewer('viewer-container')
+        let key = '0f7c1d161d7352116a21aacf0e9f44c1'
+        let cva = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+          key,
+          style: 'cva',
+        })
+
+        let vec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+          key,
+        })
+
+        let img = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+          key,
+          style: 'img',
+        })
+
+        let ter = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+          key,
+          style: 'ter',
+        })
+
+        viewer
+          .addBaseLayer(img, {
+            name: '影像',
+            iconUrl: '../assets/icon/img.png',
+          })
+          .addBaseLayer([img, cva], {
+            name: '影像+注记',
+            iconUrl: '../assets/icon/img.png',
+          })
+          .addBaseLayer(vec, {
+            name: '电子',
+            iconUrl: '../assets/icon/elec.png',
+          })
+          .addBaseLayer([vec, cva], {
+            name: '电子+注记',
+            iconUrl: '../assets/icon/elec.png',
+          })
+          .addBaseLayer(ter, {
+            name: '地形',
+            iconUrl: '../assets/icon/ter.png',
+          })
+      }
+      DM.ready().then(initViewer)
+    </script>
+  </body>
+</html>

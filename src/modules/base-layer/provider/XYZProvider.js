@@ -1,3 +1,7 @@
+/**
+ * @Author: Caven Chen
+ */
+
 import { Event } from '../../event'
 import BaseLayerType from '../BaseLayerType'
 

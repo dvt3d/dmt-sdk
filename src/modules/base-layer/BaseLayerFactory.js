@@ -4,6 +4,7 @@ import AMapProvider from './provider/AMapProvider'
 import StyleProvider from './provider/StyleProvider'
 import XYZProvider from './provider/XYZProvider'
 import TDTProvider from './provider/TDTProvider'
+import ImageProvider from './provider/ImageProvider'
 
 class BaseLayerFactory {
   /**
@@ -44,6 +45,15 @@ class BaseLayerFactory {
 
   /**
    *
+   * @param {*} options
+   * @returns {BaseLayer}
+   */
+  static createImageBaseLayer(options = {}) {
+    return new BaseLayer(new ImageProvider(options), options)
+  }
+
+  /**
+   *
    * @param type
    * @param options
    * @returns {BaseLayer|null}
@@ -58,6 +68,8 @@ class BaseLayerFactory {
         return this.createXYZBaseLayer(options)
       case BaseLayerType.TDT:
         return this.createTDTBaseLayer(options)
+      case BaseLayerType.IMAGE:
+        return this.createImageBaseLayer(options)
       default:
         return null
     }

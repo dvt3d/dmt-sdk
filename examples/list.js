@@ -96,8 +96,8 @@ const EXAMPLE_LIST = [
     folder: 'offline',
     children: [
       {
-        name: '蓝色',
-        page: 'blue.html',
+        name: '白天',
+        page: 'day.html',
       },
       {
         name: '夜晚',

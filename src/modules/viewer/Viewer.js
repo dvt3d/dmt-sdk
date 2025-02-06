@@ -50,6 +50,15 @@ class Viewer {
         container,
         style: DEF_STYLE,
         maxPitch: 85,
+        transformRequest: (url, type) => {
+          const requestMap = getParam('request-map')
+          if (requestMap) {
+            for (let key in requestMap) {
+              return requestMap[key](url)
+            }
+          }
+          return { url }
+        },
       })
       this._ready = new Promise((resolve) => {
         this._map.once('style.load', (e) => {

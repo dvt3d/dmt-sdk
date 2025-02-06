@@ -51,14 +51,7 @@ class Popup extends Widget {
       return this
     }
     this._delegate.position.copy(Parse.parsePosition(position))
-    if (content && typeof content === 'string') {
-      this._contentEl.innerHTML = content
-    } else if (content && content instanceof Element) {
-      while (this._contentEl.hasChildNodes()) {
-        this._contentEl.removeChild(this._contentEl.firstChild)
-      }
-      this._contentEl.appendChild(content)
-    }
+    DomUtil.setContent(this._contentEl, content)
     this._wrapper.style.visibility = 'visible'
     return this
   }

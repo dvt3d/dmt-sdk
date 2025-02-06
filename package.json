@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@dvgis/maplibre-three-plugin": "^2.0.0",
-    "maplibre-gl": "^5.0.0",
+    "maplibre-gl": "^5.0.1",
     "three": "^0.172.0"
   }
 }

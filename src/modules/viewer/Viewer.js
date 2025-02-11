@@ -35,6 +35,7 @@ class Viewer {
       ...options,
     }
     this._sceneMode = this._options.sceneMode
+    this._projection = this._options.projection || { type: 'mercator' }
     this._baseLayerCache = {}
     this._layerCache = {}
     this._ready = Promise.resolve()
@@ -60,8 +61,10 @@ class Viewer {
           return { url }
         },
       })
+
       this._ready = new Promise((resolve) => {
         this._map.once('style.load', (e) => {
+          this._map.setProjection(this._projection)
           resolve()
         })
       })
@@ -177,6 +180,7 @@ class Viewer {
       .forEach((layer) => {
         layer.fire('add', this)
       })
+    this._map.setProjection(this._projection)
   }
 
   _hasDomLayer() {
@@ -199,17 +203,27 @@ class Viewer {
 
   /**
    *
-   * @param type
+   * @param {*} sky
    * @returns {Viewer}
    */
-  setProjection(type) {
+  setSky(sky) {
+    this._ready.then(() => {
+      this._map.setSky(sky)
+    })
+    return this
+  }
+
+  /**
+   *
+   * @param projection
+   * @returns {Viewer}
+   */
+  setProjection(projection) {
     if (this._sceneMode !== SceneMode.MAP_SCENE) {
       throw 'this scene mode not support the function'
     }
     this._ready.then(() => {
-      this._map.setProjection({
-        type,
-      })
+      this._map.setProjection(projection)
     })
     return this
   }

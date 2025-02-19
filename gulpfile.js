@@ -38,7 +38,7 @@ async function buildCSS(options) {
     ...buildConfig,
     minify: !!options.minify,
     entryPoints: ['src/themes/index.scss'],
-    outfile: path.join('dist', 'dm.min.css'),
+    outfile: path.join('dist', 'dmt.min.css'),
   })
 }
 
@@ -50,7 +50,7 @@ async function buildModules(options) {
       format: 'iife',
       globalName: 'DM',
       minify: !!options.minify,
-      outfile: path.join('dist', 'dm.min.js'),
+      outfile: path.join('dist', 'dmt.min.js'),
     })
   }
 
@@ -70,8 +70,8 @@ async function buildModules(options) {
 }
 
 async function regenerate(option, content) {
-  await fse.remove('dist/dm.min.js')
-  await fse.remove('dist/dm.min.css')
+  await fse.remove('dist/dmt.min.js')
+  await fse.remove('dist/dmt.min.css')
   await buildModules(option)
   await buildCSS(option)
 }

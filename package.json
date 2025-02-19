@@ -1,5 +1,5 @@
 {
-  "name": "lib-cli",
+  "name": "@dvt3d/dmt-sdk",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:cavencj/lib-cli.git",

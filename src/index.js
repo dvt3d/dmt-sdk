@@ -6,7 +6,7 @@ import { setParam } from './global-api'
 
 export * from './modules'
 
-const DEF_BASE_URL = './libs/dm-sdk/resources/'
+const DEF_BASE_URL = './libs/dmt-sdk/resources/'
 
 let _baseUrl = DEF_BASE_URL
 

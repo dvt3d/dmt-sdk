@@ -8,9 +8,9 @@
   />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>distance legend</title>
-  <script src="../libs/dm.min.js"></script>
+  <script src="../libs/dmt.min.js"></script>
   <script src="../dat.gui.min.js"></script>
-  <link href="../libs/dm.min.css" type='text/css' rel="stylesheet" />
+  <link href="../libs/dmt.min.css" type='text/css' rel="stylesheet" />
   <link href='../index.css' type='text/css' rel='stylesheet'>
 
   <style>
@@ -38,8 +38,8 @@
 <script>
   let viewer = undefined
   function initViewer(){
-    viewer = new DM.Viewer('viewer-container')
-    let baseLayer = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.STYLE,{
+    viewer = new DMT.Viewer('viewer-container')
+    let baseLayer = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.STYLE,{
       url: 'https://demotiles.maplibre.org/style.json',
     })
     viewer.addBaseLayer(baseLayer)
@@ -57,7 +57,7 @@
     })
   }
 
-  DM.ready().then(initViewer)
+  DMT.ready().then(initViewer)
 </script>
 </body>
 </html>

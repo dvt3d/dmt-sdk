@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>tdt</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <style>
       * {
         margin: 0;
@@ -35,23 +35,23 @@
     <script>
       let viewer = undefined
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
+        viewer = new DMT.Viewer('viewer-container')
         let key = '0f7c1d161d7352116a21aacf0e9f44c1'
-        let cva = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+        let cva = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.TDT, {
           key,
           style: 'cva',
         })
 
-        let vec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+        let vec = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.TDT, {
           key,
         })
 
-        let img = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+        let img = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.TDT, {
           key,
           style: 'img',
         })
 
-        let ter = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.TDT, {
+        let ter = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.TDT, {
           key,
           style: 'ter',
         })
@@ -78,7 +78,7 @@
             iconUrl: '../assets/icon/ter.png',
           })
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

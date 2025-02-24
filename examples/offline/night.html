@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>night</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <style>
       * {
         margin: 0;
@@ -35,16 +35,16 @@
     <script>
       let viewer = undefined
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.IMAGE,
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.IMAGE,
           {
             url: '../assets/tile/world_n.jpg',
           }
         )
         viewer.addBaseLayer(baseLayer)
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

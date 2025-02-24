@@ -8,9 +8,9 @@
   />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>hawk eye map</title>
-  <script src="../libs/dm.min.js"></script>
+  <script src="../libs/dmt.min.js"></script>
   <script src="../dat.gui.min.js"></script>
-  <link href="../libs/dm.min.css" type='text/css' rel="stylesheet" />
+  <link href="../libs/dmt.min.css" type='text/css' rel="stylesheet" />
   <link href='../index.css' type='text/css' rel='stylesheet'>
 
   <style>
@@ -38,13 +38,13 @@
 <script>
   let viewer = undefined
   function initViewer(){
-    viewer = new DM.Viewer('viewer-container')
-    let baseLayer = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP,{
+    viewer = new DMT.Viewer('viewer-container')
+    let baseLayer = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.AMAP,{
       style:'img'
     })
     viewer.addBaseLayer(baseLayer)
     viewer.hawkEyeMap.enabled = true
-    let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.AMAP)
+    let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.AMAP)
     viewer.hawkEyeMap.addBaseLayer(baseLayer_elec)
     addGuiController()
   }
@@ -59,7 +59,7 @@
     })
   }
 
-  DM.ready().then(initViewer)
+  DMT.ready().then(initViewer)
 </script>
 </body>
 </html>

@@ -8,9 +8,9 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>billboard</title>
-    <script src="../libs/dm.min.js"></script>
+    <script src="../libs/dmt.min.js"></script>
     <script src="../dat.gui.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <link href="../index.css" type="text/css" rel="stylesheet" />
 
     <style>
@@ -52,7 +52,7 @@
         for (let i = 0; i < num; i++) {
           let lng = 120.38105869 + Math.random() * 0.5
           let lat = 31.10115627 + Math.random() * 0.5
-          list.push(DM.Position.fromDegrees(lng, lat))
+          list.push(DMT.Position.fromDegrees(lng, lat))
         }
         return list
       }
@@ -61,7 +61,7 @@
         removeAll()
         let positions = generatePosition(num)
         let billboards = positions.map((item) => {
-          let billboard = new DM.Billboard(item, '../assets/icon/camera_1.png')
+          let billboard = new DMT.Billboard(item, '../assets/icon/camera_1.png')
           billboard.setStyle({
             size: 0.5,
           })
@@ -75,20 +75,20 @@
       }
 
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer_basic = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.STYLE,
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.STYLE,
           {
             url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
           }
         )
         viewer.addBaseLayer(baseLayer_basic)
-        layer = new DM.VectorLayer('layer', DM.VectorType.BILLBOARD)
+        layer = new DMT.VectorLayer('layer', DMT.VectorType.BILLBOARD)
         viewer.addLayer(layer)
         window.viewer = viewer
       }
 
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

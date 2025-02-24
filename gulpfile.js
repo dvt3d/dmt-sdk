@@ -48,7 +48,7 @@ async function buildModules(options) {
     await esbuild.build({
       ...buildConfig,
       format: 'iife',
-      globalName: 'DM',
+      globalName: 'DMT',
       minify: !!options.minify,
       outfile: path.join('dist', 'dmt.min.js'),
     })

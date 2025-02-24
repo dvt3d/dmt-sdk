@@ -1,5 +1,5 @@
 import { toRadian } from '../math'
-import { EARTH_CIRCUMFERENCE } from '../constants'
+import { EARTH_CIRCUMFERENCE } from '../constant'
 
 class Transform {
   /**

@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>amap</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
 
     <style>
       * {
@@ -36,15 +36,15 @@
     <script>
       let viewer = undefined
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.STYLE,
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.STYLE,
           {
             url: 'https://demotiles.maplibre.org/style.json',
           }
         )
-        let baseLayer_basic = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.STYLE,
+        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.STYLE,
           {
             url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
           }
@@ -59,7 +59,7 @@
             name: '样式二',
           })
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>map scene</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" rel="stylesheet" />
 
     <style>
       * {
@@ -36,13 +36,13 @@
     <script>
       let viewer = undefined
       function initViewer(){
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer = DM.BaseLayerFactory.createBaseLayer(DM.BaseLayerType.STYLE,{
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.STYLE,{
           url: 'https://demotiles.maplibre.org/style.json',
         })
         viewer.addBaseLayer(baseLayer)
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

@@ -8,9 +8,9 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>vector</title>
-    <script src="../libs/dm.min.js"></script>
+    <script src="../libs/dmt.min.js"></script>
     <script src="../dat.gui.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <link href="../index.css" type="text/css" rel="stylesheet" />
 
     <style>
@@ -44,22 +44,22 @@
         for (let i = 0; i < num; i++) {
           let lng = 120.38105869 + Math.random() * 0.5
           let lat = 31.10115627 + Math.random() * 0.5
-          list.push(DM.Position.fromDegrees(lng, lat))
+          list.push(DMT.Position.fromDegrees(lng, lat))
         }
         return list
       }
 
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer_basic = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.STYLE,
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.STYLE,
           {
             url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
           }
         )
 
-        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.AMAP,
+        let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.AMAP,
           {
             style: 'img',
           }
@@ -73,16 +73,16 @@
             iconUrl: '../assets/icon/img.png',
             name: '影像',
           })
-        layer = new DM.DomLayer('layer')
+        layer = new DMT.DomLayer('layer')
         viewer.addLayer(layer)
         let divIcons = generatePosition(20).map((item) => {
-          let divIcon = new DM.DivIcon(item, '我是一个DIV')
+          let divIcon = new DMT.DivIcon(item, '我是一个DIV')
           return divIcon
         })
         layer.addOverlays(divIcons)
       }
 
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

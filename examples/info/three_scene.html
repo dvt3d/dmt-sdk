@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>three scene</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" rel="stylesheet" />
 
     <style>
       * {
@@ -36,15 +36,15 @@
     <script>
       let viewer = undefined
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container', {
-          sceneMode: DM.SceneMode.THREE_SCENE,
+        viewer = new DMT.Viewer('viewer-container', {
+          sceneMode: DMT.SceneMode.THREE_SCENE,
         })
-        let layer = new DM.MeshLayer('layer')
+        let layer = new DMT.MeshLayer('layer')
         viewer.addLayer(layer)
-        let box = new DM.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
+        let box = new DMT.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
         layer.addOverlay(box)
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

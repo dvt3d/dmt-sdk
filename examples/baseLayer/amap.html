@@ -8,8 +8,8 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>amap</title>
-    <script src="../libs/dm.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <script src="../libs/dmt.min.js"></script>
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <style>
       * {
         margin: 0;
@@ -35,18 +35,18 @@
     <script>
       let viewer = undefined
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer_elec = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.AMAP
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.AMAP
         )
-        let baseLayer_img = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.AMAP,
+        let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.AMAP,
           {
             style: 'img',
           }
         )
-        let baseLayer_cva = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.AMAP,
+        let baseLayer_cva = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.AMAP,
           {
             style: 'cva',
           }
@@ -65,7 +65,7 @@
             name: '影像+注记',
           })
       }
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

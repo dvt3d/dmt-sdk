@@ -9,6 +9,8 @@ export { default as Position } from './position/Position'
 
 export { default as Parse, default as P } from './parse/Parse'
 
+export { default as Transform, default as T } from './tramsform/Transform'
+
 /**
  * base layer
  */

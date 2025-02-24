@@ -8,9 +8,9 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>polyline</title>
-    <script src="../libs/dm.min.js"></script>
+    <script src="../libs/dmt.min.js"></script>
     <script src="../dat.gui.min.js"></script>
-    <link href="../libs/dm.min.css" type="text/css" rel="stylesheet" />
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <link href="../index.css" type="text/css" rel="stylesheet" />
 
     <style>
@@ -40,18 +40,18 @@
       let layer = undefined
 
       function initViewer() {
-        viewer = new DM.Viewer('viewer-container')
-        let baseLayer_basic = DM.BaseLayerFactory.createBaseLayer(
-          DM.BaseLayerType.STYLE,
+        viewer = new DMT.Viewer('viewer-container')
+        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+          DMT.BaseLayerType.STYLE,
           {
             url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
           }
         )
         viewer.addBaseLayer(baseLayer_basic)
-        layer = new DM.VectorLayer('layer', DM.VectorType.POLYLINE)
+        layer = new DMT.VectorLayer('layer', DMT.VectorType.POLYLINE)
         viewer.addLayer(layer)
-        let polyline = new DM.Polyline(
-          DM.Position.fromDegreesArray([-75, 35, -125, 35])
+        let polyline = new DMT.Polyline(
+          DMT.Position.fromDegreesArray([-75, 35, -125, 35])
         )
         polyline.setStyle({
           color: '#ff0000',
@@ -61,7 +61,7 @@
         window.viewer = viewer
       }
 
-      DM.ready().then(initViewer)
+      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

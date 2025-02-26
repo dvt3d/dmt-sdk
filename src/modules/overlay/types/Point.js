@@ -6,16 +6,8 @@ import Overlay from '../Overlay'
 import Parse from '../../parse/Parse'
 import State from '../../state/State'
 import { LayerType } from '../../layer'
-
-const DEF_STYLE = {
-  size: 5,
-  color: '#ffffff',
-  blur: 0,
-  opacity: 1,
-  strokeWidth: 2,
-  strokeColor: '#0000ff',
-  strokeOpacity: 1,
-}
+import { VectorPointMaterialProperty } from '../../material'
+import { GeoJSonUtil } from '../../utils'
 
 class Point extends Overlay {
   constructor(position) {
@@ -24,7 +16,6 @@ class Point extends Overlay {
     }
     super()
     this._position = Parse.parsePosition(position)
-    this._style = DEF_STYLE
     this._state = State.INITIALIZED
   }
 
@@ -60,19 +51,25 @@ class Point extends Overlay {
   _mountedHook() {
     if (this._layer.type === LayerType.VECTOR) {
       const lngLat = this._position.toDegrees()
-      this._delegate = {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [+lngLat.lng, +lngLat.lat],
-        },
-        properties: {
+      const material = this._style.material || new VectorPointMaterialProperty()
+      this._delegate = GeoJSonUtil.createPointFeature(
+        [+lngLat.lng, +lngLat.lat],
+        {
           overlayId: this._overlayId,
           id: this._bid,
           show: this._show,
-          ...this._style,
-        },
-      }
+          size: this._style.size || 5,
+          ...material.getValue(),
+        }
+      )
+    }
+
+    if (this._layer.type === LayerType.MESH) {
+      const pointCollection = this._layer.pointCollection
+      const geometry = this._layer.pointCollection.geometry
+      // const positionAttr = geometry.get
+      // const pointCollection = this._t
+      // const positionAttr = this._layer.bi
     }
   }
 

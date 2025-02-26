@@ -10,6 +10,10 @@ class MeshLayer extends Layer {
     super(id)
     this._delegate = new THREE.Group()
     this._delegate.name = id
+    this._pointCollection = new THREE.Points()
+    this._delegate.add(this._pointCollection)
+    this._billboardCollection = new THREE.Points()
+    this._delegate.add(this._billboardCollection)
   }
 
   get type() {
@@ -26,6 +30,14 @@ class MeshLayer extends Layer {
 
   get show() {
     return this._show
+  }
+
+  get pointCollection() {
+    return this._pointCollection
+  }
+
+  get billboardCollection() {
+    return this._billboardCollection
   }
 
   _mountedHook() {

@@ -6,6 +6,7 @@ import Overlay from '../Overlay'
 import State from '../../state/State'
 import Parse from '../../parse/Parse'
 import { LayerType } from '../../layer'
+import { GeoJSonUtil } from '../../utils'
 
 const DEF_STYLE = {
   size: 1,
@@ -73,20 +74,17 @@ class Billboard extends Overlay {
   _mountedHook() {
     if (this._layer.type === LayerType.VECTOR) {
       const lngLat = this._position.toDegrees()
-      this._delegate = {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [lngLat.lng, lngLat.lat],
-        },
-        properties: {
+      this._delegate = GeoJSonUtil.createPointFeature(
+        [lngLat.lng, lngLat.lat],
+        {
           overlayId: this._overlayId,
           id: this._bid,
           show: this._show,
           icon: this._icon,
           ...this._style,
-        },
-      }
+        }
+      )
+    } else {
     }
   }
 

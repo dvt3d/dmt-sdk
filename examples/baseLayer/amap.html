@@ -33,39 +33,35 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP
-        )
-        let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP,
-          {
-            style: 'img',
-          }
-        )
-        let baseLayer_cva = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP,
-          {
-            style: 'cva',
-          }
-        )
-        viewer
-          .addBaseLayer(baseLayer_elec, {
-            iconUrl: '../assets/icon/elec.png',
-            name: '电子',
-          })
-          .addBaseLayer(baseLayer_img, {
-            iconUrl: '../assets/icon/img.png',
-            name: '影像',
-          })
-          .addBaseLayer([baseLayer_img, baseLayer_cva], {
-            iconUrl: '../assets/icon/img.png',
-            name: '影像+注记',
-          })
-      }
-      DMT.ready().then(initViewer)
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP
+      )
+      let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP,
+        {
+          style: 'img',
+        }
+      )
+      let baseLayer_cva = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP,
+        {
+          style: 'cva',
+        }
+      )
+      viewer
+        .addBaseLayer(baseLayer_elec, {
+          iconUrl: '../assets/icon/elec.png',
+          name: '电子',
+        })
+        .addBaseLayer(baseLayer_img, {
+          iconUrl: '../assets/icon/img.png',
+          name: '影像',
+        })
+        .addBaseLayer([baseLayer_img, baseLayer_cva], {
+          iconUrl: '../assets/icon/img.png',
+          name: '影像+注记',
+        })
     </script>
   </body>
 </html>

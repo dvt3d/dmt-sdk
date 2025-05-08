@@ -34,15 +34,14 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      function initViewer(){
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.STYLE,{
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
           url: 'https://demotiles.maplibre.org/style.json',
-        })
-        viewer.addBaseLayer(baseLayer)
-      }
-      DMT.ready().then(initViewer)
+        }
+      )
+      viewer.addBaseLayer(baseLayer)
     </script>
   </body>
 </html>

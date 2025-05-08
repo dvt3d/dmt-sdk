@@ -36,9 +36,6 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      let layer = undefined
-
       function generatePosition(num) {
         let list = []
         for (let i = 0; i < num; i++) {
@@ -49,34 +46,30 @@
         return list
       }
 
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-          }
-        )
-        viewer.addBaseLayer(baseLayer_basic)
-        layer = new DMT.VectorLayer('layer', DMT.VectorType.BILLBOARD)
-        let billboards = generatePosition(50).map((item, index) => {
-          let billboard = new DMT.Billboard(item, '../assets/icon/camera_2.png')
-          billboard.attr = {
-            index,
-          }
-          billboard.setStyle({
-            size: 0.8,
-          })
-          billboard.on('click', (e) => {
-            console.log(e)
-          })
-          return billboard
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+        }
+      )
+      viewer.addBaseLayer(baseLayer_basic)
+      let layer = new DMT.VectorLayer('layer', DMT.VectorType.BILLBOARD)
+      let billboards = generatePosition(50).map((item, index) => {
+        let billboard = new DMT.Billboard(item, '../assets/icon/camera_2.png')
+        billboard.attr = {
+          index,
+        }
+        billboard.setStyle({
+          size: 0.8,
         })
-        layer.addOverlays(billboards)
-        viewer.addLayer(layer)
-      }
-
-      DMT.ready().then(initViewer)
+        billboard.on('click', (e) => {
+          console.log(e)
+        })
+        return billboard
+      })
+      layer.addOverlays(billboards)
+      viewer.addLayer(layer)
     </script>
   </body>
 </html>

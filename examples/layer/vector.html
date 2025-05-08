@@ -36,9 +36,6 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      let layer = undefined
-
       function generatePosition(num) {
         let list = []
         for (let i = 0; i < num; i++) {
@@ -49,66 +46,62 @@
         return list
       }
 
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
+      let viewer = new DMT.Viewer('viewer-container')
 
-        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://demotiles.maplibre.org/style.json',
-          }
-        )
+      let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://demotiles.maplibre.org/style.json',
+        }
+      )
 
-        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-          }
-        )
+      let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+        }
+      )
 
-        let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP,
-          {
-            style: 'img',
-          }
-        )
+      let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP,
+        {
+          style: 'img',
+        }
+      )
 
-        let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP
-        )
+      let baseLayer_elec = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP
+      )
 
-        viewer
-          .addBaseLayer(baseLayer, {
-            iconUrl: '../assets/icon/vec.png',
-            name: '样式一',
-          })
-          .addBaseLayer(baseLayer_basic, {
-            iconUrl: '../assets/icon/vec_1.png',
-            name: '样式二',
-          })
-          .addBaseLayer(baseLayer_elec, {
-            iconUrl: '../assets/icon/elec.png',
-            name: '电子',
-          })
-          .addBaseLayer(baseLayer_img, {
-            iconUrl: '../assets/icon/img.png',
-            name: '影像',
-          })
-
-        layer = new DMT.VectorLayer('layer', DMT.VectorType.BILLBOARD)
-
-        let billboards = generatePosition(10).map((item) => {
-          let billboard = new DMT.Billboard(item, '../assets/icon/camera_2.png')
-          billboard.setStyle({
-            size: 0.8,
-          })
-          return billboard
+      viewer
+        .addBaseLayer(baseLayer, {
+          iconUrl: '../assets/icon/vec.png',
+          name: '样式一',
         })
-        layer.addOverlays(billboards)
-        viewer.addLayer(layer)
-      }
+        .addBaseLayer(baseLayer_basic, {
+          iconUrl: '../assets/icon/vec_1.png',
+          name: '样式二',
+        })
+        .addBaseLayer(baseLayer_elec, {
+          iconUrl: '../assets/icon/elec.png',
+          name: '电子',
+        })
+        .addBaseLayer(baseLayer_img, {
+          iconUrl: '../assets/icon/img.png',
+          name: '影像',
+        })
 
-      DMT.ready().then(initViewer)
+      let layer = new DMT.VectorLayer('layer', DMT.VectorType.BILLBOARD)
+
+      let billboards = generatePosition(10).map((item) => {
+        let billboard = new DMT.Billboard(item, '../assets/icon/camera_2.png')
+        billboard.setStyle({
+          size: 0.8,
+        })
+        return billboard
+      })
+      layer.addOverlays(billboards)
+      viewer.addLayer(layer)
     </script>
   </body>
 </html>

@@ -46,8 +46,16 @@
     </div>
 
     <script>
-      let viewer = undefined
-      let layer = undefined
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+        }
+      )
+      viewer.addBaseLayer(baseLayer_basic)
+      let layer = new DMT.VectorLayer('layer', DMT.VectorType.POINT)
+      viewer.addLayer(layer)
 
       function generatePosition(num) {
         let list = []
@@ -69,23 +77,6 @@
       function removeAll() {
         layer.clear()
       }
-
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-          }
-        )
-        viewer.addBaseLayer(baseLayer_basic)
-        layer = new DMT.VectorLayer('layer', DMT.VectorType.POINT)
-        viewer.addLayer(layer)
-
-        window.viewer = viewer
-      }
-
-      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

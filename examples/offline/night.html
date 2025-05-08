@@ -33,18 +33,15 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.IMAGE,
-          {
-            url: '../assets/tile/world_n.jpg',
-          }
-        )
-        viewer.addBaseLayer(baseLayer)
-      }
-      DMT.ready().then(initViewer)
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.IMAGE,
+        {
+          url: '../assets/tile/world_n.jpg',
+          bounds:[-180,-66.56,180,66.56]
+        }
+      )
+      viewer.addBaseLayer(baseLayer)
     </script>
   </body>
 </html>

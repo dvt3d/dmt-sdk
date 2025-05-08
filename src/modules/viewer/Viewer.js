@@ -26,9 +26,6 @@ const DEF_OPTS = {
 
 class Viewer {
   constructor(container, options = {}) {
-    if (!getParam('isInitialized')) {
-      throw 'the sdk is not initialized, please do the ready function '
-    }
     this._container = container
     this._options = {
       ...DEF_OPTS,

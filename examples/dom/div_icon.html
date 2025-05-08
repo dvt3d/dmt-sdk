@@ -36,9 +36,6 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      let layer = undefined
-
       function generatePosition(num) {
         let list = []
         for (let i = 0; i < num; i++) {
@@ -49,40 +46,36 @@
         return list
       }
 
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-          }
-        )
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+        }
+      )
 
-        let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.AMAP,
-          {
-            style: 'img',
-          }
-        )
-        viewer
-          .addBaseLayer(baseLayer_basic, {
-            iconUrl: '../assets/icon/elec.png',
-            name: '电子',
-          })
-          .addBaseLayer(baseLayer_img, {
-            iconUrl: '../assets/icon/img.png',
-            name: '影像',
-          })
-        layer = new DMT.DomLayer('layer')
-        viewer.addLayer(layer)
-        let divIcons = generatePosition(20).map((item) => {
-          let divIcon = new DMT.DivIcon(item, '我是一个DIV')
-          return divIcon
+      let baseLayer_img = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.AMAP,
+        {
+          style: 'img',
+        }
+      )
+      viewer
+        .addBaseLayer(baseLayer_basic, {
+          iconUrl: '../assets/icon/elec.png',
+          name: '电子',
         })
-        layer.addOverlays(divIcons)
-      }
-
-      DMT.ready().then(initViewer)
+        .addBaseLayer(baseLayer_img, {
+          iconUrl: '../assets/icon/img.png',
+          name: '影像',
+        })
+      let layer = new DMT.DomLayer('layer')
+      viewer.addLayer(layer)
+      let divIcons = generatePosition(20).map((item) => {
+        let divIcon = new DMT.DivIcon(item, '我是一个DIV')
+        return divIcon
+      })
+      layer.addOverlays(divIcons)
     </script>
   </body>
 </html>

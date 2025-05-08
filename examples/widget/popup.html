@@ -35,9 +35,7 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
+       let  viewer = new DMT.Viewer('viewer-container')
         let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
           DMT.BaseLayerType.STYLE,
           {
@@ -46,9 +44,6 @@
         )
         viewer.addBaseLayer(baseLayer)
         viewer.popup.showAt(DMT.Position.fromDegrees(120, 31), '我是一个popup')
-      }
-
-      DMT.ready().then(initViewer)
     </script>
   </body>
 </html>

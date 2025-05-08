@@ -1,65 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-  />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>zoom controller</title>
-  <script src="../libs/dmt.min.js"></script>
-  <script src="../dat.gui.min.js"></script>
-  <link href="../libs/dmt.min.css" type='text/css' rel="stylesheet" />
-  <link href='../index.css' type='text/css' rel='stylesheet'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>zoom controller</title>
+    <script src="../libs/dmt.min.js"></script>
+    <script src="../dat.gui.min.js"></script>
+    <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
+    <link href="../index.css" type="text/css" rel="stylesheet" />
 
-  <style>
+    <style>
       * {
-          margin: 0;
-          padding: 0;
+        margin: 0;
+        padding: 0;
       }
       html,
       body {
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
 
       .viewer-container {
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
-  </style>
-</head>
-<body>
-<div id="viewer-container" class="viewer-container"></div>
+    </style>
+  </head>
+  <body>
+    <div id="viewer-container" class="viewer-container"></div>
 
-<script>
-  let viewer = undefined
-  function initViewer(){
-    viewer = new DMT.Viewer('viewer-container')
-    let baseLayer = DMT.BaseLayerFactory.createBaseLayer(DMT.BaseLayerType.STYLE,{
-      url: 'https://demotiles.maplibre.org/style.json',
-    })
-    viewer.addBaseLayer(baseLayer)
-    viewer.compass.enabled = true
-    viewer.zoomController.enabled = true
-    addGuiController()
-  }
+    <script>
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://demotiles.maplibre.org/style.json',
+        }
+      )
+      viewer.addBaseLayer(baseLayer)
+      viewer.compass.enabled = true
+      viewer.zoomController.enabled = true
 
-  function addGuiController(){
-    let controls = {
-      enable :true,
-    }
-    let gui = new dat.GUI();
-    gui.add(controls,'enable',).onChange(value=>{
-      viewer.compass.enabled = value
-      viewer.zoomController.enabled = value
-    })
-  }
-
-  DMT.ready().then(initViewer)
-</script>
-</body>
+      let controls = {
+        enable: true,
+      }
+      let gui = new dat.GUI()
+      gui.add(controls, 'enable').onChange((value) => {
+        viewer.compass.enabled = value
+        viewer.zoomController.enabled = value
+      })
+    </script>
+  </body>
 </html>

@@ -34,17 +34,13 @@
     <div id="viewer-container" class="viewer-container"></div>
 
     <script>
-      let viewer = undefined
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container', {
-          sceneMode: DMT.SceneMode.THREE_SCENE,
-        })
-        let layer = new DMT.MeshLayer('layer')
-        viewer.addLayer(layer)
-        let box = new DMT.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
-        layer.addOverlay(box)
-      }
-      DMT.ready().then(initViewer)
+      let viewer = new DMT.Viewer('viewer-container', {
+        sceneMode: DMT.SceneMode.THREE_SCENE,
+      })
+      let layer = new DMT.MeshLayer('layer')
+      viewer.addLayer(layer)
+      let box = new DMT.Box({ x: 0, y: 0, z: 1 }, { x: 1, y: 1, z: 1 })
+      layer.addOverlay(box)
     </script>
   </body>
 </html>

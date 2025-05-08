@@ -9,7 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>polyline</title>
     <script src="../libs/dmt.min.js"></script>
-    <script src="../dat.gui.min.js"></script>
     <link href="../libs/dmt.min.css" type="text/css" rel="stylesheet" />
     <link href="../index.css" type="text/css" rel="stylesheet" />
 
@@ -34,36 +33,27 @@
   </head>
   <body>
     <div id="viewer-container" class="viewer-container"></div>
-
     <script>
-      let viewer = undefined
-      let layer = undefined
-
-      function initViewer() {
-        viewer = new DMT.Viewer('viewer-container')
-        let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
-          DMT.BaseLayerType.STYLE,
-          {
-            url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-          }
-        )
-        viewer.addBaseLayer(baseLayer_basic)
-        layer = new DMT.DashLineLayer('layer', {
-          dashArray: [2, 2],
-        })
-        viewer.addLayer(layer)
-        let polyline = new DMT.Polyline(
-          DMT.Position.fromDegreesArray([-75, 35, -125, 35])
-        )
-        polyline.setStyle({
-          color: '#ff0000',
-          width: 3,
-        })
-        layer.addOverlay(polyline)
-        window.viewer = viewer
-      }
-
-      DMT.ready().then(initViewer)
+      let viewer = new DMT.Viewer('viewer-container')
+      let baseLayer_basic = DMT.BaseLayerFactory.createBaseLayer(
+        DMT.BaseLayerType.STYLE,
+        {
+          url: 'https://api.maptiler.com/maps/basic-v2/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+        }
+      )
+      viewer.addBaseLayer(baseLayer_basic)
+      let layer = new DMT.DashLineLayer('layer', {
+        dashArray: [2, 2],
+      })
+      viewer.addLayer(layer)
+      let polyline = new DMT.Polyline(
+        DMT.Position.fromDegreesArray([-75, 35, -125, 35])
+      )
+      polyline.setStyle({
+        color: '#ff0000',
+        width: 3,
+      })
+      layer.addOverlay(polyline)
     </script>
   </body>
 </html>
